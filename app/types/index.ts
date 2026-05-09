@@ -46,6 +46,7 @@
 
 export type MarketType = "updown" | "abovebelow" | "range" | "hit" | "yesno";
 
+
 export interface Outcome {
     label: string;
     percentage: number;
@@ -55,9 +56,10 @@ export interface MockMarket {
     id: string;
     title: string;
     category: string;
-    type: MarketType;
     asset?: string;
-    volume: number;
+    type: MarketType;
     outcomes: Outcome[];
+    volume: number;
     isLive: boolean;
+    icon: string;
 }

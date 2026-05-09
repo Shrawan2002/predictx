@@ -516,23 +516,8 @@
 
 // Sample Market Data for All Types
 // Import this and use with your MarketCard component
+import { MockMarket } from "@/types";
 
-export interface Outcome {
-    label: string;
-    percentage: number;
-}
-
-export interface MockMarket {
-    id: string;
-    title: string;
-    category: string;
-    asset?: string;
-    type: "yesno" | "updown" | "abovebelow" | "range" | "hit";
-    outcomes: Outcome[];
-    volume: number;
-    isLive: boolean;
-    icon: string;
-}
 
 // ✅ YES/NO MARKETS
 export const yesNoMarkets: MockMarket[] = [
@@ -813,6 +798,7 @@ export function getMarketsByType(type: MockMarket['type']) {
  * Get markets by category
  */
 export function getMarketsByCategory(category: string) {
+    console.log("category", category);
     return allMarkets.filter(m => m.category === category);
 }
 

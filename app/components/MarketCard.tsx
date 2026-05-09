@@ -385,6 +385,7 @@
 // }
 
 
+
 "use client";
 
 import Link from "next/link";
@@ -418,13 +419,14 @@ export default function MarketCard({ market }: { market: MockMarket }) {
             )
             : null;
 
+
     // Render buttons based on market type
     const renderButtons = () => {
         switch (market.type) {
-            // YES/NO TYPE - Row format matching screenshot
+            // YES/NO TYPE - Row format 
             case "yesno":
                 return (
-                    <div className="space-y-2 mt-4">
+                    <div className="space-y-2 mt-2">
                         {market.outcomes.map((outcome, idx) => (
                             <div
                                 key={idx}
@@ -460,7 +462,7 @@ export default function MarketCard({ market }: { market: MockMarket }) {
             // UP/DOWN TYPE - Two large buttons
             case "updown":
                 return (
-                    <div className="flex gap-3 mt-4">
+                    <div className="flex gap-3 mt-6 mb-0">
                         <button className="flex-1 py-3 rounded-xl bg-green-500/20 text-green-400 hover:bg-green-500/30 font-medium transition">
                             Up
                         </button>
@@ -588,7 +590,7 @@ export default function MarketCard({ market }: { market: MockMarket }) {
                 className="h-full"
             >
                 <Card className="bg-[#0f1419] border border-white/10 hover:border-blue-500/30 hover:bg-[#1a1f2e] rounded-xl transition cursor-pointer h-full flex flex-col">
-                    <CardContent className="p-4 flex flex-col h-full">
+                    <CardContent className="p-4 flex flex-col h-full pb-0.5">
                         {/* Header Section */}
                         <div className="flex items-start justify-between mb-3 gap-3">
                             {/* Left: Icon + Title */}
@@ -612,7 +614,7 @@ export default function MarketCard({ market }: { market: MockMarket }) {
                                                 {mainOutcome.percentage}%
                                             </p>
                                             <p className="text-xs text-gray-400">
-                                                {market.type === "yesno" ? mainOutcome.label : mainOutcome.label}
+                                                {market.type === "yesno" ? mainOutcome.label + "'s chance" : mainOutcome.label}
                                             </p>
                                         </div>
                                     </div>
@@ -621,7 +623,7 @@ export default function MarketCard({ market }: { market: MockMarket }) {
                         </div>
 
                         {/* Type Badge */}
-                        <div className="mb-3">
+                        <div >
                             <span
                                 className={`inline-block text-xs font-medium px-2 py-1 rounded border ${getTypeBadgeColor()}`}
                             >

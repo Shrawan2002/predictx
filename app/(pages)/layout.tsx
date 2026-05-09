@@ -4,6 +4,7 @@ import { useState } from "react";
 import Header from "@/components/Header";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
+import { TabProvider } from "@/context/tabContext";
 
 export default function PagesLayout({
     children,
@@ -23,7 +24,9 @@ export default function PagesLayout({
 
             {/* MAIN */}
             <main className="flex-1 pt-[112px] md:ml-[170px]  p-4 md:p-20  ">
-                {children}
+                <TabProvider>
+                    {children}
+                </TabProvider>
             </main>
             <div className="md:ml-[170px]">
                 <Footer />
