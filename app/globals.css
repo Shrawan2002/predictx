@@ -29,6 +29,16 @@ body {
   scrollbar-width: none;
 }
 
+html.dark {
+  background: #0f172a;
+  color: white;
+}
+
+html.light {
+  background: white;
+  color: black;
+}
+
 @theme inline {
   --font-heading: var(--font-sans);
   --font-sans: var(--font-sans);

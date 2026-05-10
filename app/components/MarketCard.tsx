@@ -604,7 +604,6 @@ export default function MarketCard({ market }: { market: MockMarket }) {
                                     </h3>
                                 </div>
                             </div>
-
                             {/* Right: Main Outcome Percentage */}
                             {mainOutcome && (
                                 <div className="text-right flex-shrink-0">

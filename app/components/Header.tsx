@@ -1,9 +1,27 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
-import { Search, Menu, TrendingUp, Trophy, Globe, Bitcoin } from "lucide-react";
+import { useEffect, useState, useRef } from "react";
+import {
+    Search,
+    Menu,
+    TrendingUp,
+    Trophy,
+    Globe,
+    Bitcoin,
+    Moon,
+    ChevronRight,
+    Award,
+    Coins,
+    Rocket,
+    FileText,
+    HelpCircle,
+} from "lucide-react";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "./ui/dropdown-menu";
+import { Separator } from "./ui/separator";
+import { Switch } from "./ui/switch";
+import useTheme from "@/context/themeContext";
 
 const tabs = [
     { label: "Trending", icon: TrendingUp, href: "/home" },
@@ -26,19 +44,65 @@ export function Logo() {
     );
 }
 
+function MenuItem({
+    icon: Icon,
+    label,
+}: {
+    icon: any;
+    label: string;
+}) {
+    return (
+        <button
+            className="w-full flex items-center gap-3 px-4 py-3
+            rounded-2xl hover:bg-white/5 transition"
+        >
+            <Icon className="w-5 h-5 text-yellow-400" />
+
+            <span className="text-[15px] font-medium text-white">
+                {label}
+            </span>
+        </button>
+    );
+}
+
+function MenuLink({ label }: { label: string }) {
+    return (
+        <button
+            className="w-full text-left px-3 py-3 rounded-2xl
+            text-gray-400 hover:text-white hover:bg-white/5 transition"
+        >
+            {label}
+        </button>
+    );
+}
+
 export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
     const path = usePathname();
     const router = useRouter();
 
     const [scrolled, setScrolled] = useState(false);
+    const [openMenu, setOpenMenu] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
 
+    const { themeMode, lightTheme, darkTheme } = useTheme();
     // 🔥 Scroll effect
     useEffect(() => {
+        // 🔥 Click outside to close menu
+        // function handleClickOutSide(event: MouseEvent) {
+        //     if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        //         setOpenMenu(false);
+        //     }
+        // }
         const handleScroll = () => {
             setScrolled(window.scrollY > 10);
         };
         window.addEventListener("scroll", handleScroll);
-        return () => window.removeEventListener("scroll", handleScroll);
+        // window.addEventListener("click", handleClickOutSide);
+        return () => {
+            window.removeEventListener("scroll", handleScroll)
+            // window.removeEventListener("click", handleClickOutSide);
+
+        }
     }, []);
 
     return (
@@ -87,6 +151,69 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
                     <button className="text-sm px-4 h-[36px] rounded-full bg-blue-600 hover:bg-blue-500 transition">
                         Sign Up
                     </button>
+                    <DropdownMenu >
+                        <DropdownMenuTrigger asChild>
+                            <button className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition">
+                                <Menu className="w-5 h-5 text-white" />
+                            </button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent
+                            className="absolute top-[30px] w-[290px] right-0  rounded-3xl border
+                               border-white/10 bg-[#11161d]/95 backdrop-blur-2xl 
+                                shadow-2x shadow-black/40 p-0
+                                overflow-hidden z-1000 "
+                        >
+                            {/* TOP */}
+                            <div className="p-3 space-y-0.5">
+                                <MenuItem icon={Award} label="Leaderboard" />
+                                <MenuItem icon={Coins} label="Rewards" />
+                                <MenuItem icon={Rocket} label="APIs" />
+                                {/* DARK MODE */}
+                                <div className="flex items-center justify-between rounded-2xl bg-white/5 px-4 py-3">
+                                    <div className="flex items-center gap-3">
+                                        <Moon className="w-5 h-5 text-blue-400" />
+                                        <span className="text-[15px] font-medium text-white">
+                                            Dark mode
+                                        </span>
+                                    </div>
+
+                                    <Switch
+                                        checked={themeMode === "dark"}
+                                        onCheckedChange={(checked) => {
+                                            checked ? darkTheme() : lightTheme();
+                                        }}
+                                    />
+                                </div>
+                            </div>
+
+                            <Separator className="bg-white/10" />
+
+                            {/* BOTTOM */}
+                            <div className="p-3 space-y-0.3">
+                                <MenuLink label="Accuracy" />
+                                <MenuLink label="Documentation" />
+                                <MenuLink label="Help Center" />
+                                <MenuLink label="Terms of Use" />
+
+
+                                <button
+                                    className="
+                                        w-full mt-2 flex items-center justify-between
+                                        px-3 py-3 rounded-2xl hover:bg-white/5 transition
+                                    "
+                                >
+                                    <div className="flex items-center gap-3 text-gray-300">
+                                        <span className="text-lg">🇮🇳</span>
+                                        <span>भाषा</span>
+                                    </div>
+
+                                    <ChevronRight className="w-4 h-4 text-gray-500" />
+                                </button>
+
+                            </div>
+
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                 </div>
             </div>
 
@@ -118,6 +245,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
                     );
                 })}
             </div>
-        </header>
+        </header >
     );
 }
+

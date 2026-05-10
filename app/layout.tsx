@@ -37,6 +37,7 @@
 import "./globals.css";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
+import { ThemeProvider } from "./context/themeContext";
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -49,10 +50,14 @@ export default function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
+
+
   return (
     <html lang="en" className={cn("font-sans", geist.variable)}>
       <body className="bg-[#15191d] text-white">
-        {children}
+        <ThemeProvider>
+          {children}
+        </ThemeProvider>
       </body>
     </html>
   );
