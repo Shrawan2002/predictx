@@ -3,7 +3,6 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { usePathname, useRouter } from "next/navigation";
 import {
-    Clock,
     TrendingUp,
     Globe,
     Trophy,
@@ -13,7 +12,7 @@ import {
     LineChart,
     Activity,
     Briefcase,
-    Star
+    Star,
 } from "lucide-react";
 
 const filters = [
@@ -22,7 +21,7 @@ const filters = [
     { label: "Activity", icon: Activity, href: "/activity" },
     { label: "Portfolio", icon: Briefcase, href: "/portfolio" },
     { label: "Favourites", icon: Star, href: "/favourites" },
-]
+];
 
 const categories = [
     { label: "Trending", icon: TrendingUp },
@@ -31,9 +30,6 @@ const categories = [
     { label: "Sports", icon: Trophy },
 ];
 
-
-// const timeFilters = ["5 Min", "15 Min", "1 Hour", "4 Hours", "Daily"];
-
 export default function Sidebar({
     open,
     onClose,
@@ -41,48 +37,75 @@ export default function Sidebar({
     open: boolean;
     onClose: () => void;
 }) {
-
     const router = useRouter();
     const path = usePathname();
 
     const onNavigate = (href: string) => {
         router.push(href);
         onClose();
-    }
+    };
 
     return (
         <>
-            {/* 🟢 DESKTOP SIDEBAR */}
-            <div className="hidden md:flex fixed  top-[112px] left-0 w-[200px] h-[calc(100vh-112px)] bg-[#15191d] border-r border-white/10 flex-col p-5">
-                {/* CATEGORY */}
+            {/* 🖥 DESKTOP SIDEBAR */}
+            <div
+                className="
+                hidden md:flex fixed top-[112px] left-0
+                w-[220px] h-[calc(100vh-112px)]
+                bg-white dark:bg-[#0B0F19]
+                border-r border-black/5 dark:border-white/10
+                flex-col p-5 transition-colors duration-300
+            "
+            >
+                {/* MAIN MENU */}
                 <div>
-                    {/* <h2 className="text-xs text-gray-500 mb-3 uppercase tracking-wide">
-                        Categories
-                    </h2> */}
+                    <h2 className="text-xs uppercase tracking-[0.2em] mb-4 font-semibold text-[#9CA3AF] dark:text-[#64748B]">
+                        Menu
+                    </h2>
 
-                    <div className="space-y-2 ">
+                    <div className="space-y-2">
                         {filters.map((item) => {
                             const isActive = path === item.href;
+
                             return (
                                 <div
-                                    onClick={() => onNavigate(item.href)}
                                     key={item.label}
-                                    className={`group flex items-center gap-3 px-3 py-2 rounded-xl cursor-pointer text-gray-400 hover:text-white hover:bg-blue-800/40 transition ${isActive ? "bg-blue-800/40 text-white" : ""}`}
+                                    onClick={() => onNavigate(item.href)}
+                                    className={`
+                                        group flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer
+                                        transition-all duration-200
+
+                                        ${isActive
+                                            ? "bg-blue-500/10 text-[#18181B] dark:text-white border border-blue-500/20"
+                                            : "text-[#6B7280] hover:text-[#18181B] hover:bg-black/5 dark:text-[#94A3B8] dark:hover:text-white dark:hover:bg-white/5"
+                                        }
+                                    `}
                                 >
-                                    {/* ICON WRAPPER */}
-                                    <div className="p-1.5 rounded-lg transition group-hover:bg-blue-500/20">
-                                        <item.icon className=" w-4 h-4 text-gray-400 group-hover:text-white transition" />
+                                    {/* ICON */}
+                                    <div className="p-1.5 rounded-lg">
+                                        <item.icon
+                                            className={`
+                                                w-4 h-4 transition-colors duration-200
+                                                ${isActive
+                                                    ? "text-blue-500 dark:text-blue-400"
+                                                    : "text-[#6B7280] group-hover:text-[#18181B] dark:text-[#94A3B8] dark:group-hover:text-white"
+                                                }
+                                            `}
+                                        />
                                     </div>
-                                    <span className="text-sm"> {item.label}</span>
+
+                                    <span className="text-sm font-medium">
+                                        {item.label}
+                                    </span>
                                 </div>
-                            )
+                            );
                         })}
                     </div>
                 </div>
 
-                {/* Categories FILTER */}
-                <div className="mt-6">
-                    <h2 className="text-xs text-gray-500 mb-3 uppercase tracking-wide">
+                {/* CATEGORIES */}
+                <div className="mt-8">
+                    <h2 className="text-xs uppercase tracking-[0.2em] mb-4 font-semibold text-[#9CA3AF] dark:text-[#64748B]">
                         Categories
                     </h2>
 
@@ -90,10 +113,18 @@ export default function Sidebar({
                         {categories.map((item) => (
                             <div
                                 key={item.label}
-                                className="flex items-center gap-3 px-3 py-2 rounded-xl cursor-pointer text-gray-400 hover:text-white hover:bg-blue-800/40 transition"
+                                className="
+                                    flex items-center gap-3 px-3 py-2.5 rounded-xl cursor-pointer
+                                    text-[#6B7280] hover:text-[#18181B] hover:bg-black/5
+                                    dark:text-[#94A3B8] dark:hover:text-white dark:hover:bg-white/5
+                                    transition-all duration-200
+                                "
                             >
-                                < item.icon size={16} />
-                                {item.label}
+                                <item.icon className="w-4 h-4" />
+
+                                <span className="text-sm font-medium">
+                                    {item.label}
+                                </span>
                             </div>
                         ))}
                     </div>
@@ -106,7 +137,7 @@ export default function Sidebar({
                     <>
                         {/* BACKDROP */}
                         <motion.div
-                            className="md:hidden fixed inset-0 bg-black/50 z-40  "
+                            className="md:hidden fixed inset-0 bg-black/50 z-40"
                             onClick={onClose}
                             initial={{ opacity: 0 }}
                             animate={{ opacity: 1 }}
@@ -115,54 +146,111 @@ export default function Sidebar({
 
                         {/* DRAWER */}
                         <motion.div
-                            className="md:hidden fixed top-0 left-0 w-[200px] h-full bg-[#15191d] z-50 p-6 flex flex-col border-r border-white/10 shadow-2xl"
+                            className="
+                                md:hidden fixed top-0 left-0
+                                w-[240px] h-full
+                                bg-white dark:bg-[#0B0F19]
+                                border-r border-black/5 dark:border-white/10
+                                z-50 p-6 flex flex-col shadow-2xl
+                            "
                             initial={{ x: -300 }}
                             animate={{ x: 0 }}
                             exit={{ x: -300 }}
-                            transition={{ type: "spring", damping: 25, stiffness: 200 }}
+                            transition={{
+                                type: "spring",
+                                damping: 25,
+                                stiffness: 200,
+                            }}
                         >
+                            {/* HEADER */}
                             <div className="flex items-center justify-between mb-8">
-                                <span className="font-bold text-xl tracking-tight text-white">PredictX</span>
-                                <button onClick={onClose} className="p-2 text-gray-400 hover:text-white transition">
-                                    <X size={24} />
+                                <span className="font-bold text-xl tracking-tight text-[#18181B] dark:text-white">
+                                    PredictX
+                                </span>
+
+                                <button
+                                    onClick={onClose}
+                                    className="
+                                        p-2 rounded-lg
+                                        text-[#6B7280] hover:text-[#18181B]
+                                        dark:text-[#94A3B8] dark:hover:text-white
+                                        hover:bg-black/5 dark:hover:bg-white/5
+                                        transition
+                                    "
+                                >
+                                    <X size={22} />
                                 </button>
                             </div>
 
-                            <div className="flex flex-col flex-1 overflow-y-auto no-scrollbar gap-8">
-                                {/* MAIN NAVIGATION */}
+                            <div className="flex flex-col flex-1 overflow-y-auto gap-8">
+                                {/* MOBILE MENU */}
                                 <div>
-                                    <h2 className="text-xs text-gray-500 mb-4 uppercase tracking-widest font-semibold">Menu</h2>
-                                    <div className="space-y-1">
+                                    <h2 className="text-xs uppercase tracking-[0.2em] mb-4 font-semibold text-[#9CA3AF] dark:text-[#64748B]">
+                                        Menu
+                                    </h2>
+
+                                    <div className="space-y-2">
                                         {filters.map((item) => {
-                                            const isActive = path === item.href;
+                                            const isActive =
+                                                path === item.href;
+
                                             return (
                                                 <div
-                                                    onClick={() => onNavigate(item.href)}
                                                     key={item.label}
-                                                    className={`group flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-all duration-200 
+                                                    onClick={() =>
+                                                        onNavigate(item.href)
+                                                    }
+                                                    className={`
+                                                        group flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer
+                                                        transition-all duration-200
+
                                                         ${isActive
-                                                            ? "bg-blue-600/20 text-white border border-blue-500/30"
-                                                            : "text-gray-400 hover:text-white hover:bg-white/5"}`}
+                                                            ? "bg-blue-500/10 text-[#18181B] dark:text-white border border-blue-500/20"
+                                                            : "text-[#6B7280] hover:text-[#18181B] hover:bg-black/5 dark:text-[#94A3B8] dark:hover:text-white dark:hover:bg-white/5"
+                                                        }
+                                                    `}
                                                 >
-                                                    <item.icon size={20} className={isActive ? "text-blue-400" : "text-gray-400 group-hover:text-white"} />
-                                                    <span className="font-medium text-sm">{item.label}</span>
+                                                    <item.icon
+                                                        className={`
+                                                            w-5 h-5
+                                                            ${isActive
+                                                                ? "text-blue-500 dark:text-blue-400"
+                                                                : "text-[#6B7280] dark:text-[#94A3B8]"
+                                                            }
+                                                        `}
+                                                    />
+
+                                                    <span className="text-sm font-medium">
+                                                        {item.label}
+                                                    </span>
                                                 </div>
                                             );
                                         })}
                                     </div>
                                 </div>
 
-                                {/* CATEGORIES */}
+                                {/* MOBILE CATEGORIES */}
                                 <div>
-                                    <h2 className="text-xs text-gray-500 mb-4 uppercase tracking-widest font-semibold">Categories</h2>
-                                    <div className="space-y-1">
+                                    <h2 className="text-xs uppercase tracking-[0.2em] mb-4 font-semibold text-[#9CA3AF] dark:text-[#64748B]">
+                                        Categories
+                                    </h2>
+
+                                    <div className="space-y-2">
                                         {categories.map((item) => (
                                             <div
                                                 key={item.label}
-                                                className="flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer text-gray-400 hover:text-white hover:bg-white/5 transition-all duration-200"
+                                                className="
+                                                    flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer
+                                                    text-[#6B7280] hover:text-[#18181B] hover:bg-black/5
+                                                    dark:text-[#94A3B8] dark:hover:text-white dark:hover:bg-white/5
+                                                    transition-all duration-200
+                                                "
                                             >
-                                                <item.icon size={20} />
-                                                <span className="font-medium text-sm">{item.label}</span>
+                                                <item.icon className="w-5 h-5" />
+
+                                                <span className="text-sm font-medium">
+                                                    {item.label}
+                                                </span>
                                             </div>
                                         ))}
                                     </div>

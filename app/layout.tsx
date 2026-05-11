@@ -54,7 +54,7 @@ export default function RootLayout({
 
   return (
     <html lang="en" className={cn("font-sans", geist.variable)}>
-      <body className="bg-[#15191d] text-white">
+      <body className="bg-background text-foreground transition-colors duration-300">
         <ThemeProvider>
           {children}
         </ThemeProvider>

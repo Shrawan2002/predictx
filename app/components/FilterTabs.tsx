@@ -57,13 +57,13 @@ export default function FilterTabs() {
                         <button
                             key={tab.value}
                             onClick={() => setActiveTab(tab.value)}
-                            className="relative px-4 py-2 rounded-xl text-sm whitespace-nowrap overflow-hidden"
+                            className="relative px-4 py-2 rounded-md text-sm whitespace-nowrap overflow-hidden"
                         >
                             {/* Animated Background */}
                             {isActive && (
                                 <motion.div
                                     layoutId="activeTab"
-                                    className="absolute inset-0 bg-[#11314a] rounded-xl"
+                                    className="absolute inset-0 dark:bg-[#11314a] bg-blue-400 rounded-xl"
                                     transition={{
                                         type: "spring",
                                         stiffness: 50,
@@ -74,9 +74,9 @@ export default function FilterTabs() {
 
                             {/* Text */}
                             <span
-                                className={`relative z-10 transition-colors duration-300 ${isActive
-                                    ? "text-blue-500"
-                                    : "text-gray-400"
+                                className={`relative z-10 font-bold transition-colors duration-300 ${isActive
+                                    ? "text-white dark:text-blue-500"
+                                    : "dark:text-gray-400 text-black"
                                     }`}
                             >
                                 {tab.label}

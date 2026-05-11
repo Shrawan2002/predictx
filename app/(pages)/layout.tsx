@@ -14,7 +14,7 @@ export default function PagesLayout({
     const [open, setOpen] = useState(false);
 
     return (
-        <div className="bg-[#15191d] text-white min-h-screen flex flex-col">
+        <div className="bg-background text-foreground min-h-screen flex flex-col transition-colors duration-300">
 
             {/* HEADER */}
             <Header onMenuClick={() => setOpen(true)} />
@@ -23,7 +23,7 @@ export default function PagesLayout({
             <Sidebar open={open} onClose={() => setOpen(false)} />
 
             {/* MAIN */}
-            <main className="flex-1 pt-[112px] md:ml-[170px]  p-4 md:p-20  ">
+            <main className="flex-1 pt-[112px] md:ml-[170px]  p-4 md:p-20">
                 <TabProvider>
                     {children}
                 </TabProvider>

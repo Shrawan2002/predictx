@@ -30,7 +30,7 @@ export default function MarketDetailPage() {
     }
 
     return (
-        <div className="min-h-screen bg-[#0b0f14] text-white p-6">
+        <div className="min-h-screen bg-background text-foreground p-6 transition-colors duration-300">
 
             {/* Title */}
             <h1 className="text-2xl font-bold mb-4">
@@ -48,7 +48,7 @@ export default function MarketDetailPage() {
             <div className="grid md:grid-cols-2 gap-6">
 
                 {/* LEFT: Market Info */}
-                <div className="bg-[#111827] p-5 rounded-xl border border-white/10">
+                <div className="bg-card p-5 rounded-xl border border-border">
 
                     <h2 className="text-lg mb-4">Probabilities</h2>
 
@@ -72,7 +72,7 @@ export default function MarketDetailPage() {
                 </div>
 
                 {/* RIGHT: Trade Panel */}
-                <div className="bg-[#111827] p-5 rounded-xl border border-white/10">
+                <div className="bg-card p-5 rounded-xl border border-border">
 
                     <h2 className="text-lg mb-4">Trade</h2>
 
@@ -80,7 +80,7 @@ export default function MarketDetailPage() {
                     <input
                         type="number"
                         placeholder="Enter amount"
-                        className="w-full p-2 mb-4 rounded bg-[#0b0f14] border border-gray-700"
+                        className="w-full p-2 mb-4 rounded bg-background border border-border"
                     />
 
                     {/* Buttons */}

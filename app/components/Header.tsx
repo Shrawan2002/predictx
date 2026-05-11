@@ -58,7 +58,7 @@ function MenuItem({
         >
             <Icon className="w-5 h-5 text-yellow-400" />
 
-            <span className="text-[15px] font-medium text-white">
+            <span className="text-[15px] font-medium text-[#0E0F11] dark:text-[#DEE3E7]">
                 {label}
             </span>
         </button>
@@ -68,8 +68,8 @@ function MenuItem({
 function MenuLink({ label }: { label: string }) {
     return (
         <button
-            className="w-full text-left px-3 py-3 rounded-2xl
-            text-gray-400 hover:text-white hover:bg-white/5 transition"
+            className="w-full text-left px-3 py-2 rounded-2xl
+            text-[#77808D] hover:text-[#77808D]/70 dark:text-[#7B8996] dark:hover:text-[#7B8996]/70 dark:hover:bg-white/5 transition"
         >
             {label}
         </button>
@@ -81,7 +81,6 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
     const router = useRouter();
 
     const [scrolled, setScrolled] = useState(false);
-    const [openMenu, setOpenMenu] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
 
     const { themeMode, lightTheme, darkTheme } = useTheme();
@@ -107,10 +106,10 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
 
     return (
         <header
-            className={`sticky top-0 left-0 w-full z-1000 transition-all
+            className={`sticky top-0 left-0 w-full z-1000 transition-all border-b border-border bg-white/80 backdrop-blur-xl dark:bg-[#15191d]
       ${scrolled
-                    ? "bg-[#15191d]/95 backdrop-blur-xl shadow-lg"
-                    : "bg-[#15191d]/80 backdrop-blur-xl"
+                    ? "bg-background/95 backdrop-blur-xl shadow-lg"
+                    : "bg-background/80 backdrop-blur-xl"
                 }`}
         >
             {/* 🔵 TOP NAV */}
@@ -131,35 +130,65 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
 
                 {/* 🔍 SEARCH */}
                 <div className="hidden md:flex flex-1 justify-center px-6">
-                    <div className="relative w-full max-w-[520px]">
-                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    <div className="relative w-full max-w-[760px]">
 
+                        {/* Search Icon */}
+                        <Search
+                            className="absolute left-5 top-1/2 -translate-y-1/2 
+                              text-[#8B93A7] h-5 w-5"
+                            strokeWidth={2.2}
+                        />
+
+                        {/* Input */}
                         <input
-                            placeholder="Search markets..."
-                            className="w-full h-[40px] pl-10 pr-4 rounded-full bg-gray-900 border border-gray-800 outline-none 
-              focus:border-blue-500 focus:ring-2 focus:ring-blue-500/30 transition-all"
+                            type="text"
+                            placeholder="Search polymarkets..."
+                            className="
+                                w-full  
+                                h-[40px]
+                                pl-14
+                                pr-5
+                                rounded-xl
+                                bg-[#F3F4F6]
+                                dark:bg-[#1E2428]
+                                text-[#77809B]
+                                dark:text-[#77809B]
+                                placeholder:text-[#8B93A7]
+                                text-[17px]
+                                font-medium
+                                border border-transparent
+                                outline-none
+                                transition-all
+                                focus:border-white
+                                focus:bg-white
+                                focus:ring-4
+                                focus:ring-[#E5E7EB]
+                                dark:focus:ring-[#1E2428]
+                                dark:focus:bg-[#1E2428]
+                                dark:focus:border-[#1E2428]
+                             "
                         />
                     </div>
                 </div>
 
                 {/* RIGHT */}
                 <div className="flex items-center gap-3">
-                    <button className="hidden md:block text-sm text-gray-300 hover:text-white">
+                    <button className="hidden  rounded-md md:block text-sm hover:bg-[#77809B]/8 text-blue-700 font-bold py-2 px-4">
                         Log In
                     </button>
 
-                    <button className="text-sm px-4 h-[36px] rounded-full bg-blue-600 hover:bg-blue-500 transition">
+                    <button className="text-sm text-[#FFFFFF] px-4 h-[36px] rounded-md bg-[#1452F0] hover:bg-[#1452F0]/90 transition">
                         Sign Up
                     </button>
                     <DropdownMenu >
                         <DropdownMenuTrigger asChild>
-                            <button className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 transition">
-                                <Menu className="w-5 h-5 text-white" />
+                            <button className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-gray-500/10 transition">
+                                <Menu className="w-5 h-5 text-gray-900 dark:text-white/90" />
                             </button>
                         </DropdownMenuTrigger>
                         <DropdownMenuContent
                             className="absolute top-[30px] w-[290px] right-0  rounded-3xl border
-                               border-white/10 bg-[#11161d]/95 backdrop-blur-2xl 
+                               border-border bg-card/95 backdrop-blur-2xl 
                                 shadow-2x shadow-black/40 p-0
                                 overflow-hidden z-1000 "
                         >
@@ -169,27 +198,46 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
                                 <MenuItem icon={Coins} label="Rewards" />
                                 <MenuItem icon={Rocket} label="APIs" />
                                 {/* DARK MODE */}
+                                {/* DARK MODE */}
                                 <div className="flex items-center justify-between rounded-2xl bg-white/5 px-4 py-3">
                                     <div className="flex items-center gap-3">
-                                        <Moon className="w-5 h-5 text-blue-400" />
-                                        <span className="text-[15px] font-medium text-white">
+                                        <Moon className={`w-5 h-5 ${themeMode === "dark" ? "text-indigo-500" : "text-slate-400"}`} />
+                                        <span className="text-[15px] font-medium text-[#18181B] dark:text-[#E5E5E5]">
                                             Dark mode
                                         </span>
                                     </div>
 
-                                    <Switch
-                                        checked={themeMode === "dark"}
-                                        onCheckedChange={(checked) => {
-                                            checked ? darkTheme() : lightTheme();
-                                        }}
-                                    />
+                                    {/* Custom Switch */}
+                                    <button
+                                        role="switch"
+                                        aria-checked={themeMode === "dark"}
+                                        onClick={() => themeMode === "dark" ? lightTheme() : darkTheme()}
+                                        className={`
+                                            relative inline-flex items-center
+                                            w-[52px] h-[26px] rounded-full
+                                            transition-colors duration-300 ease-in-out
+                                            focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500
+                                            ${themeMode === "dark"
+                                                ? "bg-blue-500"
+                                                : "bg-[#d1d1d6]"
+                                            }
+                                        `}
+                                    >
+                                        <span
+                                            className={`
+                                            inline-b lock w-[22px] h-[22px] rounded-full bg-white
+                                            shadow-md transform transition-transform duration-300 ease-in-out
+                                            ${themeMode === "dark" ? "translate-x-[28px]" : "translate-x-[2px]"}
+                                        `}
+                                        />
+                                    </button>
                                 </div>
                             </div>
 
-                            <Separator className="bg-white/10" />
+                            <Separator className="dark:bg-white/10 bg-gray-300" />
 
                             {/* BOTTOM */}
-                            <div className="p-3 space-y-0.3">
+                            <div className="p-2 space-y-0.2">
                                 <MenuLink label="Accuracy" />
                                 <MenuLink label="Documentation" />
                                 <MenuLink label="Help Center" />
@@ -218,7 +266,7 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
             </div>
 
             {/* 🟣 TABS */}
-            <div className="flex justify-center items-center gap-3 px-4 mt-4 relative md:gap-6 md:px-6 border-b border-gray-800 ">
+            <div className="flex justify-center items-center gap-3 px-4 py-1 relative md:gap-6 md:px-6 border-b border-white/10 dark:border-black/20  ">
 
                 {tabs.map((tab) => {
                     const isActive = path === tab.href;
@@ -227,18 +275,29 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
                         <button
                             key={tab.label}
                             onClick={() => router.push(tab.href)}
-                            className={`relative flex items-center gap-2 h-full px-2 text-sm transition
-              ${isActive ? "text-white" : "text-gray-400 hover:text-white"}`}
+                            className={`
+                                relative flex items-center gap-2 h-full px-2 text-sm font-semibold transition-colors duration-200
+
+                                ${isActive
+                                    ? "text-[#18181B] dark:text-white"
+                                    : "text-[#6B7280] hover:text-[#18181B] dark:text-[#94A3B8] dark:hover:text-white"
+                                }
+  `}
                         >
                             <tab.icon className="w-4 h-4" />
+
                             <span>{tab.label}</span>
 
-                            {/* 🔥 SLIDING UNDERLINE */}
+                            {/* ACTIVE UNDERLINE */}
                             {isActive && (
                                 <motion.div
                                     layoutId="activeTab"
-                                    className="absolute bottom-0 left-0 right-0 h-[2px] bg-blue-500 rounded-full"
-                                    transition={{ type: "spring", stiffness: 500, damping: 35 }}
+                                    className="absolute -bottom-0.5 left-0 right-0 h-[2px] rounded-full bg-blue-500"
+                                    transition={{
+                                        type: "spring",
+                                        stiffness: 500,
+                                        damping: 35,
+                                    }}
                                 />
                             )}
                         </button>

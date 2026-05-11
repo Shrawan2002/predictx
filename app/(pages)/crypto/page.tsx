@@ -62,7 +62,7 @@ export default function CryptoPage() {
     }, [activeTab, search, allCryptoMarkets]);
 
     return (
-        <main className="min-h-screen bg-[#15191d] text-white px-4 md:px-8 py-6">
+        <main className="min-h-screen bg-background text-foreground px-4 md:px-8 py-6 transition-colors duration-300">
 
             {/* 🔵 TOP HEADER SECTION */}
             {/* 🔵 HEADER */}
@@ -93,10 +93,11 @@ export default function CryptoPage() {
                                     className="
                             h-10 w-10
                             flex items-center justify-center
-                            rounded-xl
-                            hover:bg-[#1b222d]
+                            rounded-md
+                            hover:bg-accent
                             transition
-                            text-gray-300 hover:text-white
+                            text-gray-800/90 hover:text-gray-900/90
+                            dark:text-white/70 dark:hover:text-white/90
                             shrink-0
                         "
                                 >
@@ -106,36 +107,25 @@ export default function CryptoPage() {
                                 <motion.div
                                     ref={searchRef}
                                     key="search-input"
-                                    initial={{
-                                        width: 40,
-                                        opacity: 0,
-                                    }}
-                                    animate={{
-                                        width: 220,
-                                        opacity: 1,
-                                    }}
-                                    exit={{
-                                        width: 40,
-                                        opacity: 0,
-                                    }}
-                                    transition={{
-                                        duration: 0.25,
-                                    }}
+                                    initial={{ width: 40, opacity: 0 }}
+                                    animate={{ width: 220, opacity: 1 }}
+                                    exit={{ width: 40, opacity: 0 }}
+                                    transition={{ duration: 0.25 }}
                                     className="overflow-hidden"
                                 >
                                     <div
                                         className="
-                                h-10
-                                flex items-center gap-2
-                                rounded-xl
-                                border border-[#2a3441]
-                                bg-[#1e2428]
-                                px-3
-                            "
+            h-10
+            flex items-center gap-2
+            rounded-xl
+            border border-border
+            bg-white dark:bg-[#161b2e]
+            px-3
+        "
                                     >
                                         <Search
                                             size={16}
-                                            className="text-gray-500 shrink-0"
+                                            className="text-gray-400 dark:text-gray-500 shrink-0"
                                         />
 
                                         <Input
@@ -143,20 +133,18 @@ export default function CryptoPage() {
                                             type="text"
                                             placeholder="Search markets..."
                                             value={search}
-                                            onChange={(e) =>
-                                                setSearch(e.target.value)
-                                            }
+                                            onChange={(e) => setSearch(e.target.value)}
                                             className="
-                                    border-0
-                                    bg-transparent
-                                    p-0
-                                    h-auto
-                                    text-sm
-                                    text-white
-                                    placeholder:text-gray-500
-                                    focus-visible:ring-0
-                                    focus-visible:ring-offset-0
-                                "
+                border-0
+                bg-transparent
+                p-0
+                h-auto
+                text-sm
+                text-gray-800 dark:text-white
+                placeholder:text-gray-400 dark:placeholder:text-gray-500
+                focus-visible:ring-0
+                focus-visible:ring-offset-0
+            "
                                         />
 
                                         <button
@@ -165,11 +153,11 @@ export default function CryptoPage() {
                                                 setSearch("");
                                             }}
                                             className="
-                                    text-gray-500
-                                    hover:text-white
-                                    transition
-                                    shrink-0
-                                "
+                text-gray-400 dark:text-gray-500
+                hover:text-gray-800 dark:hover:text-white
+                transition
+                shrink-0
+            "
                                         >
                                             <X size={16} />
                                         </button>
@@ -184,9 +172,10 @@ export default function CryptoPage() {
                     h-10 w-10
                     flex items-center justify-center
                     rounded-xl
-                    hover:bg-[#1b222d]
+                    hover:bg-accent
                     transition
-                    text-gray-300 hover:text-white
+                    text-gray-800/90 hover:text-gray-900/90
+                    dark:text-white/70 dark:hover:text-white/90
                     shrink-0
                 "
                         >
