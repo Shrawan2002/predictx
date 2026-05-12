@@ -26,6 +26,8 @@ export default function CryptoPage() {
     const [openSearch, setOpenSearch] = useState(false);
     const searchRef = useRef<HTMLDivElement>(null);
 
+    const [visibleMarkets, setVisibleMarkets] = useState(6);
+
     const allCryptoMarkets = getMarketsByCategory("Crypto");
 
     useEffect(() => {
@@ -60,6 +62,8 @@ export default function CryptoPage() {
 
         return markets;
     }, [activeTab, search, allCryptoMarkets]);
+
+    let markets = filteredMarkets.slice(0, visibleMarkets);
 
     return (
         <main className="min-h-screen bg-background text-foreground px-4 md:px-8 py-6 transition-colors duration-300">
@@ -115,13 +119,13 @@ export default function CryptoPage() {
                                 >
                                     <div
                                         className="
-            h-10
-            flex items-center gap-2
-            rounded-xl
-            border border-border
-            bg-white dark:bg-[#161b2e]
-            px-3
-        "
+                                                 h-10
+                                                flex items-center gap-2
+                                                rounded-xl
+                                                border border-border
+                                                bg-white dark:bg-[#161b2e]
+                                                px-3
+                                                "
                                     >
                                         <Search
                                             size={16}
@@ -135,16 +139,16 @@ export default function CryptoPage() {
                                             value={search}
                                             onChange={(e) => setSearch(e.target.value)}
                                             className="
-                border-0
-                bg-transparent
-                p-0
-                h-auto
-                text-sm
-                text-gray-800 dark:text-white
-                placeholder:text-gray-400 dark:placeholder:text-gray-500
-                focus-visible:ring-0
-                focus-visible:ring-offset-0
-            "
+                                                border-0
+                                                bg-transparent
+                                                p-0
+                                                h-auto
+                                                text-sm
+                                                text-gray-800 dark:text-white
+                                                placeholder:text-gray-400 dark:placeholder:text-gray-500
+                                                focus-visible:ring-0
+                                                focus-visible:ring-offset-0
+                                            "
                                         />
 
                                         <button
@@ -153,11 +157,11 @@ export default function CryptoPage() {
                                                 setSearch("");
                                             }}
                                             className="
-                text-gray-400 dark:text-gray-500
-                hover:text-gray-800 dark:hover:text-white
-                transition
-                shrink-0
-            "
+                                                text-gray-400 dark:text-gray-500
+                                                hover:text-gray-800 dark:hover:text-white
+                                                transition
+                                                shrink-0
+                                            "
                                         >
                                             <X size={16} />
                                         </button>
@@ -169,15 +173,15 @@ export default function CryptoPage() {
                         {/* ⚙️ FILTER */}
                         <button
                             className="
-                    h-10 w-10
-                    flex items-center justify-center
-                    rounded-xl
-                    hover:bg-accent
-                    transition
-                    text-gray-800/90 hover:text-gray-900/90
-                    dark:text-white/70 dark:hover:text-white/90
-                    shrink-0
-                "
+                                h-10 w-10
+                                flex items-center justify-center
+                                rounded-xl
+                                hover:bg-accent
+                                transition
+                                text-gray-800/90 hover:text-gray-900/90
+                                 dark:text-white/70 dark:hover:text-white/90
+                                shrink-0
+                            "
                         >
                             <SlidersHorizontal size={20} />
                         </button>
@@ -195,14 +199,14 @@ export default function CryptoPage() {
                 className="
                     grid
                     grid-cols-1
-                    md:grid-cols-2
+                    md:grid-cols-3
                     xl:grid-cols-3
                     2xl:grid-cols-4
                     gap-6
                 "
             >
-                {filteredMarkets.length > 0 ? (
-                    filteredMarkets.map((market) => (
+                {markets.length > 0 ? (
+                    markets.map((market) => (
                         <MarketCard
                             key={market.id}
                             market={market}
@@ -216,6 +220,25 @@ export default function CryptoPage() {
                     </div>
                 )}
             </div>
+            {/* BUTTON */}
+            {visibleMarkets < filteredMarkets.length && (
+                <div className="flex justify-center items-center mt-10">
+                    <button
+                        onClick={() => setVisibleMarkets((prev) => prev + 6)}
+                        className="
+                        px-6 h-12 rounded-full
+                            border border-border
+                            bg-background
+                            hover:bg-muted
+                            text-foreground
+                            font-semibold
+                            transition-all
+                            hover:scale-[1.02]
+                    ">
+                        Show more markets
+                    </button>
+                </div>
+            )}
         </main>
     );
 }

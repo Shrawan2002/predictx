@@ -776,13 +776,345 @@ export const hitPriceMarkets: MockMarket[] = [
     }
 ];
 
+export const politicsMarkets: MockMarket[] = [
+    {
+        id: "brazil-election-2028",
+        title: "Brazil Presidential Election",
+        category: "Politics",
+        asset: "Brazil Election",
+        type: "updown",
+        icon: "🇧🇷",
+        isLive: true,
+        volume: 69000000,
+        outcomes: [
+            { label: "Flávio Bolsonaro", percentage: 43 },
+            { label: "Luiz Inácio Lula da Silva", percentage: 40 }
+        ]
+    },
+
+    {
+        id: "republican-nominee-2028",
+        title: "Republican Presidential Nominee 2028",
+        category: "Politics",
+        asset: "US Election",
+        type: "updown",
+        icon: "🐘",
+        isLive: true,
+        volume: 614000000,
+        outcomes: [
+            { label: "J.D. Vance", percentage: 37 },
+            { label: "Marco Rubio", percentage: 25 }
+        ]
+    },
+
+    {
+        id: "democratic-nominee-2028",
+        title: "Democratic Presidential Nominee 2028",
+        category: "Politics",
+        asset: "US Election",
+        type: "updown",
+        icon: "🫏",
+        isLive: true,
+        volume: 1000000000,
+        outcomes: [
+            { label: "Gavin Newsom", percentage: 24 },
+            { label: "Kamala Harris", percentage: 9 }
+        ]
+    },
+
+    {
+        id: "presidential-election-winner-2028",
+        title: "Presidential Election Winner 2028",
+        category: "Politics",
+        asset: "US Election",
+        type: "updown",
+        icon: "🦅",
+        isLive: true,
+        volume: 577000000,
+        outcomes: [
+            { label: "JD Vance", percentage: 19 },
+            { label: "Gavin Newsom", percentage: 17 }
+        ]
+    },
+
+    {
+        id: "fed-decision-june",
+        title: "Fed Decision in June?",
+        category: "Politics",
+        asset: "Federal Reserve",
+        type: "range",
+        icon: "🏦",
+        isLive: true,
+        volume: 23000000,
+        outcomes: [
+            { label: "No change", percentage: 97 },
+            { label: "25 bps decrease", percentage: 2 }
+        ]
+    },
+
+    {
+        id: "trump-visit-china",
+        title: "Will Trump visit China on...?",
+        category: "Politics",
+        asset: "Trump",
+        type: "hit",
+        icon: "🇨🇳",
+        isLive: true,
+        volume: 4000000,
+        outcomes: [
+            { label: "May 13", percentage: 96 },
+            { label: "May 14", percentage: 2 }
+        ]
+    },
+
+    {
+        id: "next-french-election",
+        title: "Next French Presidential Election",
+        category: "Politics",
+        asset: "France Election",
+        type: "updown",
+        icon: "🇫🇷",
+        isLive: true,
+        volume: 68000000,
+        outcomes: [
+            { label: "Jordan Bardella", percentage: 25 },
+            { label: "Édouard Philippe", percentage: 20 }
+        ]
+    },
+
+    {
+        id: "elon-musk-tweets-may",
+        title: "Elon Musk # tweets May 12 - May 19, 2026?",
+        category: "Politics",
+        asset: "Elon Musk",
+        type: "range",
+        icon: "🚀",
+        isLive: true,
+        volume: 2000000,
+        outcomes: [
+            { label: "100-119", percentage: 22 },
+            { label: "120-139", percentage: 20 }
+        ]
+    },
+
+    {
+        id: "us-iran-meeting",
+        title: "US x Iran diplomatic meeting by...?",
+        category: "Politics",
+        asset: "US-Iran",
+        type: "hit",
+        icon: "🌍",
+        isLive: true,
+        volume: 35000000,
+        outcomes: [
+            { label: "June 30", percentage: 65 },
+            { label: "May 31", percentage: 28 }
+        ]
+    },
+
+    {
+        id: "uk-election-2029",
+        title: "UK General Election Winner 2029",
+        category: "Politics",
+        asset: "UK Election",
+        type: "updown",
+        icon: "🇬🇧",
+        isLive: true,
+        volume: 45000000,
+        outcomes: [
+            { label: "Labour Party", percentage: 54 },
+            { label: "Conservative Party", percentage: 41 }
+        ]
+    },
+
+    {
+        id: "india-election-2029",
+        title: "India General Election 2029",
+        category: "Politics",
+        asset: "India Election",
+        type: "abovebelow",
+        icon: "🇮🇳",
+        isLive: true,
+        volume: 87000000,
+        outcomes: [
+            { label: "BJP Majority", percentage: 61 },
+            { label: "No Majority", percentage: 39 }
+        ]
+    },
+
+    {
+        id: "fed-rate-cut-2026",
+        title: "Will Fed cut rates in 2026?",
+        category: "Politics",
+        asset: "Interest Rates",
+        type: "updown",
+        icon: "💵",
+        isLive: true,
+        volume: 19000000,
+        outcomes: [
+            { label: "Yes", percentage: 72 },
+            { label: "No", percentage: 28 }
+        ]
+    },
+    {
+        id: "china-taiwan-2026",
+        title: "China-Taiwan tensions escalate in 2026?",
+        category: "Politics",
+        asset: "China-Taiwan",
+        type: "updown",
+        icon: "🇨🇳",
+        isLive: true,
+        volume: 58000000,
+        outcomes: [
+            { label: "Yes", percentage: 46 },
+            { label: "No", percentage: 54 }
+        ]
+    },
+
+    {
+        id: "canada-election-2027",
+        title: "Canada Federal Election Winner 2027",
+        category: "Politics",
+        asset: "Canada Election",
+        type: "updown",
+        icon: "🇨🇦",
+        isLive: true,
+        volume: 31000000,
+        outcomes: [
+            { label: "Liberal Party", percentage: 48 },
+            { label: "Conservative Party", percentage: 44 }
+        ]
+    },
+
+    {
+        id: "un-climate-agreement",
+        title: "New UN climate agreement signed?",
+        category: "Politics",
+        asset: "Climate Policy",
+        type: "hit",
+        icon: "🌎",
+        isLive: true,
+        volume: 17000000,
+        outcomes: [
+            { label: "Before July", percentage: 63 },
+            { label: "After July", percentage: 37 }
+        ]
+    },
+
+    {
+        id: "trump-approval-rating",
+        title: "Trump approval rating by June?",
+        category: "Politics",
+        asset: "Trump",
+        type: "range",
+        icon: "🗳️",
+        isLive: true,
+        volume: 25000000,
+        outcomes: [
+            { label: "45%-50%", percentage: 52 },
+            { label: "50%-55%", percentage: 31 }
+        ]
+    },
+
+    {
+        id: "eu-ai-regulation",
+        title: "EU approves AI regulation bill?",
+        category: "Politics",
+        asset: "European Union",
+        type: "updown",
+        icon: "🇪🇺",
+        isLive: true,
+        volume: 21000000,
+        outcomes: [
+            { label: "Yes", percentage: 67 },
+            { label: "No", percentage: 33 }
+        ]
+    },
+
+    {
+        id: "russia-ukraine-ceasefire",
+        title: "Russia-Ukraine ceasefire by 2026?",
+        category: "Politics",
+        asset: "Russia-Ukraine",
+        type: "hit",
+        icon: "☮️",
+        isLive: true,
+        volume: 94000000,
+        outcomes: [
+            { label: "Before August", percentage: 41 },
+            { label: "After August", percentage: 59 }
+        ]
+    },
+
+    {
+        id: "india-budget-2026",
+        title: "India Budget 2026 tax cut?",
+        category: "Politics",
+        asset: "India Budget",
+        type: "abovebelow",
+        icon: "💰",
+        isLive: true,
+        volume: 14000000,
+        outcomes: [
+            { label: "Tax Cut", percentage: 58 },
+            { label: "No Tax Cut", percentage: 42 }
+        ]
+    },
+
+    {
+        id: "nato-expansion-2026",
+        title: "Will NATO add a new member in 2026?",
+        category: "Politics",
+        asset: "NATO",
+        type: "updown",
+        icon: "🛡️",
+        isLive: true,
+        volume: 29000000,
+        outcomes: [
+            { label: "Yes", percentage: 39 },
+            { label: "No", percentage: 61 }
+        ]
+    },
+
+    {
+        id: "oil-price-politics",
+        title: "Oil prices above $120 in 2026?",
+        category: "Politics",
+        asset: "Oil Market",
+        type: "abovebelow",
+        icon: "🛢️",
+        isLive: true,
+        volume: 48000000,
+        outcomes: [
+            { label: "Above $120", percentage: 44 },
+            { label: "Below $120", percentage: 56 }
+        ]
+    },
+
+    {
+        id: "us-government-shutdown",
+        title: "US government shutdown in 2026?",
+        category: "Politics",
+        asset: "US Government",
+        type: "updown",
+        icon: "🏛️",
+        isLive: true,
+        volume: 36000000,
+        outcomes: [
+            { label: "Yes", percentage: 33 },
+            { label: "No", percentage: 67 }
+        ]
+    },
+];
+
 // 📊 ALL MARKETS COMBINED
 export const allMarkets: MockMarket[] = [
     ...yesNoMarkets,
     ...upDownMarkets,
     ...aboveBelowMarkets,
     ...priceRangeMarkets,
-    ...hitPriceMarkets
+    ...hitPriceMarkets,
+    ...politicsMarkets
 ];
 
 // 🔍 Helper Functions
