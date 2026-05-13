@@ -62,7 +62,7 @@ export default function PoliticsPage() {
 
 
     return (
-        <div className=" min-h-screen bg-background text-foreground px-4 md:px-8 py-6 transition-colors duration-300">
+        <div className=" min-h-screen bg-background text-foreground  transition-colors duration-300">
             <div className="flex justify-between items-center mb-5">
                 <h1 className="text-3xl md:text-4xl font-bold tracking-tight shrink-0">Politics</h1>
                 <div ref={searchRef} className="flex items-center gap-2 ml-auto">
