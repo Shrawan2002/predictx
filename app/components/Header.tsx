@@ -22,6 +22,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "./ui/dro
 import { Separator } from "./ui/separator";
 import { Switch } from "./ui/switch";
 import useTheme from "@/context/themeContext";
+import AuthButtons from "./AuthModal";
 
 const tabs = [
     { label: "Trending", icon: TrendingUp, href: "/home" },
@@ -173,13 +174,14 @@ export default function Header({ onMenuClick }: { onMenuClick: () => void }) {
 
                 {/* RIGHT */}
                 <div className="flex items-center gap-3">
-                    <button className="hidden  rounded-md md:block text-sm hover:bg-[#77809B]/8 text-blue-700 font-bold py-2 px-4">
+                    {/* <button className="rounded-md md:block text-sm hover:bg-[#77809B]/8 text-blue-700 font-bold py-2 px-4">
                         Log In
                     </button>
 
                     <button className="text-sm text-[#FFFFFF] px-4 h-[36px] rounded-md bg-[#1452F0] hover:bg-[#1452F0]/90 transition">
                         Sign Up
-                    </button>
+                    </button> */}
+                    <AuthButtons />
                     <DropdownMenu >
                         <DropdownMenuTrigger asChild>
                             <button className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-gray-500/10 transition">
