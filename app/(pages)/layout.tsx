@@ -23,7 +23,7 @@ export default function PagesLayout({
             <Sidebar open={open} onClose={() => setOpen(false)} />
 
             {/* MAIN */}
-            <main className="flex-1 pt-[112px] md:ml-[170px]  p-4 md:p-20">
+            <main className="flex-1 pt-[70px] md:ml-[170px] px-12 md:px-20 pb-6">
                 <TabProvider>
                     {children}
                 </TabProvider>

@@ -66,7 +66,7 @@ export default function CryptoPage() {
     let markets = filteredMarkets.slice(0, visibleMarkets);
 
     return (
-        <main className="min-h-screen bg-background text-foreground px-4 md:px-8 py-6 transition-colors duration-300">
+        <main className="min-h-screen bg-background text-foregroun   transition-colors duration-300">
 
             {/* 🔵 TOP HEADER SECTION */}
             {/* 🔵 HEADER */}

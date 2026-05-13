@@ -238,13 +238,13 @@ function AuthDialog({
                                 font-medium
                             "
                         >
-                            <button className="hover:text-black transition-colors">
+                            <button className="hover:text-foreground transition-colors">
                                 Terms
                             </button>
 
                             <span>•</span>
 
-                            <button className="hover:text-black transition-colors">
+                            <button className="hover:text-foreground transition-colors">
                                 Privacy
                             </button>
                         </div>

@@ -21,7 +21,7 @@ export default function MarketsPage() {
     };
 
     return (
-        <div className="px-4 md:px-6 py-6">
+        <div className=" ">
             <h1 className="text-2xl font-bold mb-4">🔥 All Trending Markets</h1>
 
             {/* 🔥 MARKET GRID */}
