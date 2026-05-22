@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import Header from "@/components/Header";
+import Header from "@/components/header/Header";
 import Sidebar from "@/components/Sidebar";
 import Footer from "@/components/Footer";
 import { TabProvider } from "@/context/tabContext";

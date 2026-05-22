@@ -1,34 +1,3 @@
-// "use client";
-
-// import { useTab } from "@/context/tabContext";
-
-// const tabs = [{ label: "All", value: "all" },
-// { label: "Up / Down", value: "updown" },
-// { label: "Above / Below", value: "abovebelow" },
-// { label: "Price Range", value: "range" },
-// { label: "Hit Price", value: "hit" }];
-
-// export default function FilterTabs() {
-//     const { activeTab, setActiveTab } = useTab();
-
-//     return (
-//         <div className="flex gap-3 mb-6">
-//             {tabs.map((tab) => (
-//                 <button
-//                     key={tab.value}
-//                     onClick={() => setActiveTab(tab.value)}
-//                     className={`px-4 py-2 rounded-xl text-sm ${activeTab === tab.value
-//                         ? "bg-blue-600"
-//                         : "bg-[#121826] text-gray-400"
-//                         }`}
-//                 >
-//                     {tab.label}
-//                 </button>
-//             ))}
-//         </div>
-//     );
-// }
-
 
 
 "use client";

@@ -38,6 +38,7 @@ import "./globals.css";
 import { Geist } from "next/font/google";
 import { cn } from "@/lib/utils";
 import { ThemeProvider } from "./context/themeContext";
+import { Toaster } from "sonner";
 
 const geist = Geist({ subsets: ['latin'], variable: '--font-sans' });
 
@@ -58,6 +59,7 @@ export default function RootLayout({
         <ThemeProvider>
           {children}
         </ThemeProvider>
+        <Toaster richColors />
       </body>
     </html>
   );

@@ -85,11 +85,11 @@ export default function LoginPage() {
 
                 {/* Divider */}
                 <div className="flex items-center gap-4 my-8">
-                    <div className="h-[1px] flex-1 bg-[#E5E7EB]" />
+                    <div className="h-px flex-1 bg-[#E5E7EB]" />
                     <span className="text-[#7b8190] font-semibold text-[15px]">
                         OR
                     </span>
-                    <div className="h-[1px] flex-1 bg-[#E5E7EB]" />
+                    <div className="h-px flex-1 bg-[#E5E7EB]" />
                 </div>
 
                 {/* Email Box */}

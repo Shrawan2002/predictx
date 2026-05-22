@@ -286,7 +286,7 @@ export default function MarketCard({ market }: { market: MockMarket }) {
                         <div className="flex items-start justify-between mb-3 gap-3">
                             {/* Left: Icon + Title */}
                             <div className="flex items-start gap-3 flex-1 min-w-0">
-                                <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white font-bold flex-shrink-0 text-lg shadow-md">
+                                <div className="w-10 h-10 rounded-lg bg-linear-to-br from-orange-500 to-orange-600 flex items-center justify-center text-white font-bold flex-shrink-0 text-lg shadow-md">
                                     {market.icon}
                                 </div>
                                 <div className="flex-1 min-w-0">
@@ -298,7 +298,7 @@ export default function MarketCard({ market }: { market: MockMarket }) {
 
                             {/* Right: Main Outcome Percentage */}
                             {mainOutcome && (
-                                <div className="text-right flex-shrink-0">
+                                <div className="text-right shrink-0">
                                     <p className={`text-2xl font-bold ${colors.greenYes} leading-tight`}>
                                         {mainOutcome.percentage}%
                                     </p>

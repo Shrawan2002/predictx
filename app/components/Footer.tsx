@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { Mail, X, Camera, Disc, Music } from "lucide-react";
-import { Logo } from "./Header";
+import Logo from "@/components/header/HeaderLogo";
 
 export default function Footer() {
     return (

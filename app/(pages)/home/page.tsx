@@ -30,7 +30,6 @@ export default function MarketsPage() {
                 variants={containerVariants}
                 initial="hidden"
                 animate="show"
-
             >
                 {visibleMarkets.map((market) => (
                     <motion.div

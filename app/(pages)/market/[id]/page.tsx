@@ -410,7 +410,8 @@ export default function MarketDetailPage() {
                             {/* YES */}
                             <motion.div
                                 whileHover={{ y: -3, scale: 1.01 }}
-                                className="relative rounded-2xl border border-emerald-500/30 bg-linear-to-br from-emerald-500/10 to-emerald-500/5 p-5 overflow-hidden cursor-pointer group shadow-[0_0_30px_rgba(16,185,129,0.08)]"
+                                className="relative rounded-2xl border border-emerald-500/30 bg-linear-to-br from-emerald-500/10
+                                 to-emerald-500/5 p-5 overflow-hidden cursor-pointer group shadow-[0_0_30px_rgba(16,185,129,0.08)]"
                             >
                                 <div className="absolute inset-0 bg-linear-to-br from-emerald-500/5 to-transparent opacity-0 group-hover:opacity-100 transition" />
                                 <div className="absolute top-3 right-3">
@@ -426,12 +427,16 @@ export default function MarketDetailPage() {
                                     {liveYes}¢
                                 </motion.p>
                                 <p className="text-sm text-emerald-400/60 mt-1 font-medium">{liveYes}% chance</p>
-                                <div className="mt-3 h-1.5 rounded-full bg-emerald-500/20">
+                                {/* <div className="mt-3 h-1.5 rounded-full bg-emerald-500/20">
                                     <motion.div
                                         animate={{ width: `${liveYes}%` }}
                                         transition={{ duration: 0.5 }}
                                         className="h-full rounded-full bg-emerald-400"
                                     />
+                                </div> */}
+                                <div className="mt-3 h-1.5 bg-emerald-500/20 rounded-full">
+                                    <div style={{ width: `${liveYes}%` }} className="h-full rounded-full bg-emerald-400" />
+
                                 </div>
                             </motion.div>
 
