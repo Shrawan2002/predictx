@@ -1,6 +1,8 @@
 "use client";
 
 import { create } from "zustand";
+import { persist, createJSONStorage } from "zustand/middleware";
+
 import { authService } from "@/services/auth.service";
 
 interface User {
@@ -10,24 +12,54 @@ interface User {
     avatar?: string;
 }
 
+// const demoUser: User = {
+//     name: "vigyan",
+//     id: "A",
+//     email: "shrawankumar@gmail.com",
+// }
+
+// const demotoken = "aqewnkn"
+
+interface SignupPayload {
+    name: string;
+    email: string;
+    password: string;
+    referralCode?: string;
+}
+
+interface AuthResponse {
+    data: {
+        user: User;
+        access_token: string;
+    };
+}
+
 interface AuthState {
     user: User | null;
-
+    token: string | null;
     loading: boolean;
     error: string | null;
+    pendingEmail: string | null;
+    count: number;
+    increment: () => void;
+    decrement: () => void;
+    //action
 
-    isAuthenticated: boolean;
+    signup: (payload: SignupPayload) => Promise<boolean>;
+
+    verifyOtp: (
+        email: string,
+        otp: string
+    ) => Promise<boolean>;
+
+    resendOtp: (
+        email: string
+    ) => Promise<boolean>;
+
 
     login: (
         email: string,
         password: string
-    ) => Promise<boolean>;
-
-    signup: (
-        name: string,
-        email: string,
-        password: string,
-        referralCode?: string
     ) => Promise<boolean>;
 
     logout: () => Promise<void>;
@@ -36,102 +68,237 @@ interface AuthState {
 }
 
 export const useAuthStore =
-    create<AuthState>((set) => ({
-        user: { name: "shrawan", email: "shrawan@gmail.com", id: "A" },
-
-        loading: false,
-        error: null,
-
-        isAuthenticated: false,
-
-        /* LOGIN */
-
-        login: async (
-            email,
-            password
-        ) => {
-            try {
-                set({
-                    loading: true,
-                    error: null,
-                });
-
-                const data =
-                    await authService.login(
-                        email,
-                        password
-                    );
-
-                set({
-                    user: data.user,
-                    isAuthenticated: true,
-                    loading: false,
-                });
-
-                return true;
-            } catch (error: any) {
-                set({
-                    error: error.message,
-                    loading: false,
-                });
-
-                return false;
-            }
-        },
-
-        /* SIGNUP */
-
-        signup: async (
-            name,
-            email,
-            password,
-            referralCode
-        ) => {
-            try {
-                set({
-                    loading: true,
-                    error: null,
-                });
-
-                const data =
-                    await authService.signup(
-                        name,
-                        email,
-                        password,
-                        referralCode,
-                    );
-
-                set({
-                    user: data.user,
-                    isAuthenticated: true,
-                    loading: false,
-                });
-
-                return true;
-            } catch (error: any) {
-                set({
-                    error: error.message,
-                    loading: false,
-                });
-
-                return false;
-            }
-        },
-
-        /* LOGOUT */
-
-        logout: async () => {
-            await authService.logout();
-
-            set({
+    create<AuthState>()(
+        persist(
+            (set) => ({
                 user: null,
-                isAuthenticated: false,
-            });
-        },
-
-        clearError: () => {
-            set({
+                token: null,
+                loading: false,
                 error: null,
-            });
-        },
-    }));
+                pendingEmail: null,
+                count: 0,
+
+                increment: () => set((state) => ({
+                    count: state.count + 1
+                })),
+
+                decrement: () => set((state) => ({
+                    count: state.count - 1
+                })),
+
+                login: async (
+                    email,
+                    password
+                ) => {
+
+                    try {
+
+                        set({
+                            loading: true,
+                            error: null,
+                        });
+
+                        const data =
+                            await authService.login(
+                                email,
+                                password
+                            );
+
+                        console.log("data", data);
+
+                        set({
+                            user: data.data.user,
+
+                            token:
+                                data.data
+                                    .access_token,
+
+                            loading: false,
+                        });
+
+                        return true;
+
+                    } catch (error) {
+
+                        set({
+                            error:
+                                error instanceof Error
+                                    ? error.message
+                                    : "Login failed",
+
+                            loading: false,
+                        });
+
+                        return false;
+                    }
+                },
+
+                signup: async (
+                    payload
+                ) => {
+
+                    try {
+
+                        set({
+                            loading: true,
+                            error: null,
+                        });
+
+                        await authService.signup(
+                            payload
+                        );
+
+                        set({
+                            pendingEmail:
+                                payload.email,
+
+                            loading: false,
+                        });
+
+                        return true;
+
+                    } catch (error) {
+
+                        set({
+                            error:
+                                error instanceof Error
+                                    ? error.message
+                                    : "Signup failed",
+
+                            loading: false,
+                        });
+
+                        return false;
+                    }
+                },
+                // VERIFY OTP
+                verifyOtp: async (
+                    email,
+                    otp
+                ) => {
+
+                    try {
+
+                        set({
+                            loading: true,
+                            error: null,
+                        });
+
+                        const data:
+                            AuthResponse =
+                            await authService.verifyOtp(
+                                email,
+                                otp
+                            );
+
+                        set({
+                            // user: data.user,
+                            // token: data.token,
+                            pendingEmail: null,
+
+                            loading: false,
+                        });
+
+                        return true;
+
+                    } catch (error) {
+
+                        set({
+                            error:
+                                error instanceof Error
+                                    ? error.message
+                                    : "OTP verification failed",
+
+                            loading: false,
+                        });
+
+                        return false;
+                    }
+                },
+
+                resendOtp: async (
+                    email
+                ) => {
+
+                    try {
+
+                        set({
+                            loading: true,
+                            error: null,
+                        });
+
+                        await authService.resendOtp(
+                            email
+                        );
+
+                        set({
+                            loading: false,
+                        });
+
+                        return true;
+
+                    } catch (error) {
+
+                        set({
+                            error:
+                                error instanceof Error
+                                    ? error.message
+                                    : "Failed to resend OTP",
+
+                            loading: false,
+                        });
+
+                        return false;
+                    }
+                },
+
+                // logout: async () => {
+
+                //     try {
+                //         await authService.logout();
+                //     } finally {
+
+                //         set({
+                //             user: null,
+                //             token: null,
+                //             loading: false,
+                //             error: null,
+                //         });
+
+                //     }
+                // },
+
+                logout: async () => {
+
+                    set({
+                        user: null,
+                        token: null,
+                        loading: false,
+                        error: null,
+                        pendingEmail: null,
+                    });
+                },
+
+                clearError: () => {
+                    set({
+                        error: null,
+                    });
+                },
+
+            }),
+
+            {
+                name: "auth-storage",
+
+                storage: createJSONStorage(
+                    () => sessionStorage
+                ),
+
+                partialize: (state) => ({
+                    user: state.user,
+                    token: state.token,
+                    count: state.count,
+                }),
+            }
+        )
+    );

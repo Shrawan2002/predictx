@@ -24,7 +24,8 @@ import { useAuthStore } from "@/store/authStore";
 import { Button } from "../ui/button";
 
 export default function HeaderMenu() {
-    const { user } = useAuthStore();
+    const user = useAuthStore((state) => state.user);
+    const logout = useAuthStore((state) => state.logout);
     return (
         <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -38,7 +39,6 @@ export default function HeaderMenu() {
 
                         hover:bg-black/5
                         dark:hover:bg-white/10
-
                         transition
                     "
                 >
@@ -50,7 +50,7 @@ export default function HeaderMenu() {
                 className="
                     absolute
                     right-0
-                    top-10
+                    top-6
                     w-[290px]
                     rounded-xl
                     border border-border
@@ -129,7 +129,7 @@ export default function HeaderMenu() {
                 {
                     user && (
                         <div className="p-3">
-                            <Button className="w-full text-[#E23939] dark:text-red-500 hover:border-[#E23939] hover:text-[#E23939] hover:bg-red-100/60" variant="outline">Logout</Button>
+                            <Button onClick={logout} className="w-full text-[#E23939] dark:text-red-500 hover:border-[#E23939] hover:text-[#E23939] hover:bg-red-100/60" variant="outline">Logout</Button>
                         </div>
                     )
                 }

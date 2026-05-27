@@ -37,30 +37,16 @@ export default function AuthForm({
         ? loginSchema
         : signupSchema;
 
-    const {
-        login,
-        signup,
-        loading,
-    } = useAuthStore();
+    const { login, signup, loading, } = useAuthStore();
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm<
-        LoginFormData & SignupFormData
-    >({
+    const { register, handleSubmit, formState: { errors }, } = useForm<LoginFormData & SignupFormData>({
         resolver:
             zodResolver(schema) as any,
         mode: "all"
     });
 
-    const onSubmit = async (
-        data:
-            LoginFormData & SignupFormData
-    ) => {
+    const onSubmit = async (data: LoginFormData & SignupFormData) => {
         let success = false;
-
         if (isLogin) {
             // success = await login(
             //     data.email,
@@ -68,12 +54,12 @@ export default function AuthForm({
             // );
             success = true;
         } else {
-            success = await signup(
-                data.name,
-                data.email,
-                data.password,
-                data.referralCode
-            );
+            success = await signup({
+                name: data.name,
+                email: data.email,
+                password: data.password,
+                referralCode: data.referralCode,
+            });
         }
 
         if (success) {

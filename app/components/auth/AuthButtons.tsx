@@ -2,21 +2,19 @@
 
 import { useState } from "react";
 
-import AuthDialog from "./AuthDialog";
+import SignupDialog from "./SignupDialog";
+import LoginDialog from "./LoginDialog";
+import { useAuthStore } from "@/store/authStore";
 
 export default function AuthButtons() {
-    const [loginOpen, setLoginOpen] =
-        useState(false);
 
-    const [
-        signupOpen,
-        setSignupOpen,
-    ] = useState(false);
-
+    const [signupOpen, setSignupOpen,] = useState(false);
+    const [loginOpen, setLoginOpen] = useState(false);
+    const clearError = useAuthStore((s) => s.clearError);
     return (
         <>
             <button
-                className="rounded-md
+                className="rounded-md   
                     text-sm
                     hover:bg-[#77809B]/8
                     text-blue-700
@@ -30,7 +28,6 @@ export default function AuthButtons() {
             >
                 Login
             </button>
-
             <button
                 className="
                     text-sm
@@ -42,6 +39,7 @@ export default function AuthButtons() {
                     hover:bg-[#1452F0]/90
                     transition
                 "
+
                 onClick={() =>
                     setSignupOpen(true)
                 }
@@ -49,19 +47,34 @@ export default function AuthButtons() {
                 Sign Up
             </button>
 
-            <AuthDialog
-                type="login"
-                open={loginOpen}
-                onOpenChange={
-                    setLoginOpen
-                }
-            />
-
-            <AuthDialog
-                type="signup"
+            <SignupDialog
                 open={signupOpen}
                 onOpenChange={
                     setSignupOpen
+                }
+                onSuccess={() => {
+
+                    // CLOSE signup dialog
+                    setTimeout(() => {
+                        setSignupOpen(false);
+                    }, 100);
+
+                    // OPEN login dialog
+                    setTimeout(() => {
+                        setLoginOpen(true);
+                    }, 100);
+                }}
+                onLoginClick={() => {
+                    setSignupOpen(false);
+                    setLoginOpen(true);
+                    clearError();
+                }}
+            />
+
+            <LoginDialog
+                open={loginOpen}
+                onOpenChange={
+                    setLoginOpen
                 }
             />
         </>
