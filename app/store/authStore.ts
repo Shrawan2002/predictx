@@ -1,24 +1,17 @@
 "use client";
 
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
 
-import { authService } from "@/services/auth.service";
+import {
+    persist,
+    createJSONStorage,
+} from "zustand/middleware";
 
-interface User {
-    id: string;
-    name: string;
-    email: string;
-    avatar?: string;
-}
-
-// const demoUser: User = {
-//     name: "vigyan",
-//     id: "A",
-//     email: "shrawankumar@gmail.com",
-// }
-
-// const demotoken = "aqewnkn"
+import {
+    authService,
+    User,
+    AdminUser,
+} from "@/services/auth.service";
 
 interface SignupPayload {
     name: string;
@@ -27,25 +20,30 @@ interface SignupPayload {
     referralCode?: string;
 }
 
-interface AuthResponse {
-    data: {
-        user: User;
-        access_token: string;
-    };
-}
-
 interface AuthState {
-    user: User | null;
-    token: string | null;
-    loading: boolean;
-    error: string | null;
-    pendingEmail: string | null;
-    count: number;
-    increment: () => void;
-    decrement: () => void;
-    //action
 
-    signup: (payload: SignupPayload) => Promise<boolean>;
+    // ================= STATE =================
+
+    user: User | null;
+
+    admin: AdminUser | null;
+
+    loading: boolean;
+
+    error: string | null;
+
+    pendingEmail: string | null;
+
+    // ================= USER =================
+
+    login: (
+        email: string,
+        password: string
+    ) => Promise<boolean>;
+
+    signup: (
+        payload: SignupPayload
+    ) => Promise<boolean>;
 
     verifyOtp: (
         email: string,
@@ -56,13 +54,22 @@ interface AuthState {
         email: string
     ) => Promise<boolean>;
 
+    getProfile: () => Promise<boolean>;
 
-    login: (
+    logout: () => Promise<boolean>;
+
+    // ================= ADMIN =================
+
+    adminLogin: (
         email: string,
         password: string
     ) => Promise<boolean>;
 
-    logout: () => Promise<void>;
+    getAdminProfile: () => Promise<boolean>;
+
+    adminLogout: () => Promise<boolean>;
+
+    // ================= COMMON =================
 
     clearError: () => void;
 }
@@ -70,21 +77,22 @@ interface AuthState {
 export const useAuthStore =
     create<AuthState>()(
         persist(
+
             (set) => ({
+
+                // ================= INITIAL STATE =================
+
                 user: null,
-                token: null,
+
+                admin: null,
+
                 loading: false,
+
                 error: null,
+
                 pendingEmail: null,
-                count: 0,
 
-                increment: () => set((state) => ({
-                    count: state.count + 1
-                })),
-
-                decrement: () => set((state) => ({
-                    count: state.count - 1
-                })),
+                // ================= USER LOGIN =================
 
                 login: async (
                     email,
@@ -104,15 +112,18 @@ export const useAuthStore =
                                 password
                             );
 
-                        console.log("data", data);
+                        // STORE TOKEN
+                        sessionStorage.setItem(
+                            "token",
+                            data.data.access_token
+                        );
+
+                        // FETCH PROFILE
+                        const profile =
+                            await authService.getProfile();
 
                         set({
-                            user: data.data.user,
-
-                            token:
-                                data.data
-                                    .access_token,
-
+                            user: profile.data,
                             loading: false,
                         });
 
@@ -132,6 +143,8 @@ export const useAuthStore =
                         return false;
                     }
                 },
+
+                // ================= SIGNUP =================
 
                 signup: async (
                     payload
@@ -171,7 +184,9 @@ export const useAuthStore =
                         return false;
                     }
                 },
-                // VERIFY OTP
+
+                // ================= VERIFY OTP =================
+
                 verifyOtp: async (
                     email,
                     otp
@@ -184,18 +199,13 @@ export const useAuthStore =
                             error: null,
                         });
 
-                        const data:
-                            AuthResponse =
-                            await authService.verifyOtp(
-                                email,
-                                otp
-                            );
+                        await authService.verifyOtp(
+                            email,
+                            otp
+                        );
 
                         set({
-                            // user: data.user,
-                            // token: data.token,
                             pendingEmail: null,
-
                             loading: false,
                         });
 
@@ -215,6 +225,8 @@ export const useAuthStore =
                         return false;
                     }
                 },
+
+                // ================= RESEND OTP =================
 
                 resendOtp: async (
                     email
@@ -252,40 +264,232 @@ export const useAuthStore =
                     }
                 },
 
-                // logout: async () => {
+                // ================= USER PROFILE =================
 
-                //     try {
-                //         await authService.logout();
-                //     } finally {
+                getProfile: async () => {
 
-                //         set({
-                //             user: null,
-                //             token: null,
-                //             loading: false,
-                //             error: null,
-                //         });
+                    try {
 
-                //     }
-                // },
+                        set({
+                            loading: true,
+                            error: null,
+                        });
+
+                        const data =
+                            await authService.getProfile();
+
+                        set({
+                            user: data.data,
+                            loading: false,
+                        });
+
+                        return true;
+
+                    } catch (error) {
+
+                        set({
+                            error:
+                                error instanceof Error
+                                    ? error.message
+                                    : "Failed to fetch profile",
+
+                            loading: false,
+                        });
+
+                        return false;
+                    }
+                },
+
+                // ================= ADMIN LOGIN =================
+
+                adminLogin: async (
+                    email,
+                    password
+                ) => {
+
+                    try {
+
+                        set({
+                            loading: true,
+                            error: null,
+                        });
+
+                        const data =
+                            await authService.adminLogin(
+                                email,
+                                password
+                            );
+
+                        // STORE ADMIN TOKEN
+                        sessionStorage.setItem(
+                            "adminToken",
+                            data.data.access_token
+                        );
+
+                        // FETCH ADMIN PROFILE
+                        const adminProfile =
+                            await authService.getAdminProfile();
+
+                        set({
+                            admin:
+                                adminProfile.data,
+
+                            loading: false,
+                        });
+
+                        return true;
+
+                    } catch (error) {
+
+                        set({
+                            error:
+                                error instanceof Error
+                                    ? error.message
+                                    : "Admin login failed",
+
+                            loading: false,
+                        });
+
+                        return false;
+                    }
+                },
+
+                // ================= ADMIN PROFILE =================
+
+                getAdminProfile: async () => {
+
+                    try {
+
+                        set({
+                            loading: true,
+                            error: null,
+                        });
+
+                        const data =
+                            await authService.getAdminProfile();
+
+                        set({
+                            admin:
+                                data.data,
+
+                            loading: false,
+                        });
+
+                        return true;
+
+                    } catch (error) {
+
+                        set({
+                            error:
+                                error instanceof Error
+                                    ? error.message
+                                    : "Failed to fetch admin profile",
+
+                            loading: false,
+                        });
+
+                        return false;
+                    }
+                },
+
+                // ================= USER LOGOUT =================
 
                 logout: async () => {
 
+                    try {
+
+                        set({
+                            loading: true,
+                            error: null,
+                        });
+
+                        await authService.logout();
+
+                    } catch (error) {
+
+                        set({
+                            error:
+                                error instanceof Error
+                                    ? error.message
+                                    : "Logout failed",
+
+                            loading: false,
+                        });
+
+                        return false;
+                    }
+
+                    // REMOVE TOKEN
+                    sessionStorage.removeItem(
+                        "token"
+                    );
+
                     set({
                         user: null,
-                        token: null,
+                        admin: null,
                         loading: false,
                         error: null,
                         pendingEmail: null,
                     });
+
+                    return true;
                 },
 
+                // ================= ADMIN LOGOUT =================
+
+                adminLogout: async () => {
+
+                    try {
+
+                        set({
+                            loading: true,
+                            error: null,
+                        });
+
+                        await authService.adminLogout();
+
+                    } catch (error) {
+
+                        set({
+                            error:
+                                error instanceof Error
+                                    ? error.message
+                                    : "Admin logout failed",
+
+                            loading: false,
+                        });
+
+                        return false;
+                    }
+
+                    // REMOVE ADMIN TOKEN
+                    sessionStorage.removeItem(
+                        "adminToken"
+                    );
+
+                    set({
+                        user: null,
+                        admin: null,
+                        loading: false,
+                        error: null,
+                        pendingEmail: null,
+                    });
+
+                    return true;
+                },
+
+                // ================= CLEAR ERROR =================
+
                 clearError: () => {
+
                     set({
                         error: null,
                     });
                 },
 
             }),
+
+            // ================= PERSIST =================
 
             {
                 name: "auth-storage",
@@ -295,9 +499,11 @@ export const useAuthStore =
                 ),
 
                 partialize: (state) => ({
+
                     user: state.user,
-                    token: state.token,
-                    count: state.count,
+
+                    admin: state.admin,
+
                 }),
             }
         )

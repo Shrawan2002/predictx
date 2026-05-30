@@ -13,6 +13,7 @@ import PasswordInput from "./PasswordInput";
 import { Button } from "../ui/button";
 import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useRef, useEffect } from "react";
 
 interface Props {
     open: boolean;
@@ -31,6 +32,28 @@ export default function SignupDialog({ open, onOpenChange, onSuccess, onLoginCli
     const loading = useAuthStore((s) => s.loading);
     const error = useAuthStore((s) => s.error);
     const clearError = useAuthStore((s) => s.clearError);
+
+
+
+    const inputRef = useRef<HTMLInputElement>(null);
+    const [resendTimer, setResendTimer] = useState(0);
+    const [resendLoading, setResendLoading] = useState(false);
+
+    // Setup resend timer countdown
+    useEffect(() => {
+        if (resendTimer <= 0) return;
+        const interval = setInterval(() => {
+            setResendTimer((prev) => prev - 1);
+        }, 1000);
+        return () => clearInterval(interval);
+    }, [resendTimer]);
+
+    // Auto-focus input when step changes to OTP
+    useEffect(() => {
+        if (step === "otp") {
+            inputRef.current?.focus();
+        }
+    }, [step]);
 
 
     // const {
@@ -236,7 +259,7 @@ export default function SignupDialog({ open, onOpenChange, onSuccess, onLoginCli
                 )}
                 {/* OTP STEP */}
 
-                {step === "otp" && (
+                {/* {step === "otp" && (
                     <>
                         <DialogHeader>
 
@@ -317,6 +340,148 @@ export default function SignupDialog({ open, onOpenChange, onSuccess, onLoginCli
 
                         </div>
 
+                    </>
+                )} */}
+
+                {step === "otp" && (
+                    <>
+                        <DialogHeader className="space-y-3">
+                            <DialogTitle className="text-2xl font-bold text-center">
+                                Verify Your Email
+                            </DialogTitle>
+                            <DialogDescription className="text-center text-sm">
+                                We sent a 6-digit code to
+                                <span className="block font-semibold text-foreground mt-1">
+                                    {pendingEmail}
+                                </span>
+                            </DialogDescription>
+                        </DialogHeader>
+                        <div className="mt-6 space-y-5">
+                            {/* OTP INPUT BOXES */}
+                            <div className="space-y-4">
+                                <div className="flex gap-2 justify-center">
+                                    {[0, 1, 2, 3, 4, 5].map((index) => (
+                                        <div
+                                            key={index}
+                                            onClick={() => inputRef.current?.focus()}
+                                            className={`w-12 h-14 flex items-center justify-center rounded-lg border-2 transition-all duration-200 cursor-text select-none
+                                                ${otp[index]
+                                                    ? "border-blue-500 bg-blue-50"
+                                                    : error
+                                                        ? "border-red-300 bg-red-50"
+                                                        : "border-gray-300 bg-white hover:border-gray-400"
+                                                }
+                                                ${loading ? "opacity-60" : ""}`}
+                                        >
+                                            <span className="text-xl font-bold text-gray-900">
+                                                {otp[index] || ""}
+                                            </span>
+                                        </div>
+                                    ))}
+                                </div>
+                                {/* Hidden Input */}
+                                <input
+                                    ref={inputRef}
+                                    type="text"
+                                    inputMode="numeric"
+                                    value={otp}
+                                    onChange={(e) => {
+                                        const value = e.target.value.replace(/\D/g, "").slice(0, 6);
+                                        setOtp(value);
+                                        clearError();
+                                    }}
+                                    onKeyPress={(e) => {
+                                        if (e.key === "Enter" && otp.length === 6) {
+                                            handleVerifyOtp();
+                                        }
+                                    }}
+                                    maxLength={6}
+                                    disabled={loading || resendTimer > 0}
+                                    placeholder="Enter OTP"
+                                    className="absolute opacity-0 w-0 h-0 pointer-events-none"
+                                    aria-label="OTP input"
+                                />
+
+                                {/* Error Message */}
+                                {error && (
+                                    <div className="flex items-start gap-3 p-3 bg-red-50 rounded-lg border border-red-200 mt-2">
+                                        <svg
+                                            className="w-4 h-4 text-red-600 mt-0.5 flex-shrink-0"
+                                            fill="none"
+                                            stroke="currentColor"
+                                            viewBox="0 0 24 24"
+                                        >
+                                            <path
+                                                strokeLinecap="round"
+                                                strokeLinejoin="round"
+                                                strokeWidth={2}
+                                                d="M12 8v4m0 4v.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+                                            />
+                                        </svg>
+                                        <p className="text-sm text-red-700">{error}</p>
+                                    </div>
+                                )}
+
+                                {/* Info Message */}
+                                {otp.length < 6 && !error && (
+                                    <p className="text-xs text-gray-500 text-center mt-2">
+                                        {otp.length}/6 digits entered
+                                    </p>
+                                )}
+                            </div>
+
+                            {/* VERIFY BUTTON */}
+                            <Button
+                                className="w-full h-12 rounded-lg text-base font-semibold transition-all duration-200"
+                                onClick={handleVerifyOtp}
+                                disabled={loading || otp.length < 6}
+                            >
+                                {loading ? (
+                                    <>
+                                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                        Verifying...
+                                    </>
+                                ) : (
+                                    "Verify OTP"
+                                )}
+                            </Button>
+
+                            {/* RESEND SECTION */}
+                            <div className="text-center space-y-3 pt-2 border-t border-gray-200">
+                                <p className="text-sm text-gray-600">
+                                    {resendTimer > 0
+                                        ? `Resend code in ${resendTimer}s`
+                                        : "Didn't receive the code?"}
+                                </p>
+                                <button
+                                    type="button"
+                                    onClick={() => {
+                                        setResendLoading(true);
+                                        resendOtp(pendingEmail!)
+                                            .then((success) => {
+                                                if (success) {
+                                                    setResendTimer(60);
+                                                    setOtp("");
+                                                    inputRef.current?.focus();
+                                                }
+                                            })
+                                            .catch((err) => {
+                                                console.error(err);
+                                                // Fail-safe if the promise rejects rather than returning false
+                                                toast.error("Failed to resend OTP");
+                                            })
+                                            .finally(() => setResendLoading(false));
+                                    }}
+                                    disabled={resendTimer > 0 || resendLoading || loading}
+                                    className={`text-sm font-semibold transition-colors duration-200 ${resendTimer > 0 || resendLoading || loading
+                                        ? "text-gray-400 cursor-not-allowed"
+                                        : "text-blue-600 hover:text-blue-700 active:text-blue-800"
+                                        }`}
+                                >
+                                    {resendLoading ? "Resending..." : "Resend OTP"}
+                                </button>
+                            </div>
+                        </div>
                     </>
                 )}
             </DialogContent>
