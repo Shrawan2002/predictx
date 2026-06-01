@@ -65,6 +65,7 @@ import {
     useEffect,
     useState,
 } from "react";
+import AdminDarkWrapper from "./adminwraper";
 
 export default function DashboardLayout({
     children,
@@ -77,59 +78,63 @@ export default function DashboardLayout({
     const [isAuthenticated, setIsAuthenticated] = useState(false);
 
     const [loading, setLoading] = useState(true);
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
-    // useEffect(() => {
+    useEffect(() => {
+        // SAFE:
+        // runs only in browser
+        const adminToken = sessionStorage.getItem("adminToken");
 
-    //     // SAFE:
-    //     // runs only in browser
-    //     const adminToken = sessionStorage.getItem("adminToken");
+        if (!adminToken) {
+            router.replace("/admin/login");
+        } else {
+            setIsAuthenticated(true);
+        }
 
-    //     // NOT LOGGED IN
-    //     if (!adminToken) {
-    //         router.replace("/admin/login");
-    //     } else {
-    //         // LOGGED IN
-    //         setIsAuthenticated(true);
-    //     }
+        setLoading(false);
 
-    //     setLoading(false);
-
-    // }, [router]);
+    }, [router]);
 
     // LOADING SCREEN
-    // if (loading) {
-    //     return (
-    //         <div className="h-screen flex items-center justify-center bg-[#070B14] text-white">
-    //             Loading...
-    //         </div>
-    //     );
-    // }
+    if (loading) {
+        return (
+            <div className="h-screen flex items-center justify-center bg-[#070B14] text-white">
+                Loading...
+            </div>
+        );
+    }
 
     // PREVENT FLASH
-    // if (!isAuthenticated) {
-    //     return null;
-    // }
+    if (!isAuthenticated) {
+        return null;
+    }
+
+    const onMenuClick = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
 
     return (
         // ROOT
-        <div className="flex h-screen overflow-hidden bg-[#070B14] text-white">
+        <AdminDarkWrapper>
+            <div className="flex h-screen overflow-hidden bg-[#070B14] text-white">
 
-            {/* SIDEBAR */}
-            <Sidebar />
+                {/* SIDEBAR */}
+                <Sidebar isSidebarOpen={isSidebarOpen} onMenuClick={onMenuClick} />
 
-            {/* RIGHT SIDE */}
-            <div className="flex flex-1 flex-col min-w-0 overflow-hidden">
+                {/* RIGHT SIDE */}
+                <div className="flex flex-1 flex-col min-w-0 overflow-hidden">
 
-                {/* TOPBAR */}
-                <Topbar />
+                    {/* TOPBAR */}
+                    <Topbar onMenuClick={onMenuClick} />
 
-                {/* MAIN CONTENT */}
-                <main className="flex-1 overflow-y-auto p-6">
-                    {children}
-                </main>
+                    {/* MAIN CONTENT */}
+                    <main className="flex-1 overflow-y-auto p-6">
+                        {children}
+                    </main>
+
+                </div>
 
             </div>
-
-        </div>
+        </AdminDarkWrapper>
     );
 }
