@@ -1,36 +1,32 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Loader2, Plus, PenLine, Sparkles, X } from "lucide-react";
+import { Loader2, Plus, PenLine, X } from "lucide-react";
 import {
-    Form,
-    FormControl,
-    FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+    Form, FormControl, FormField, FormItem, FormLabel, FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { categorySchema, CategoryFormData } from "@/schema/category.schema";
 import { useCategoryStore } from "@/store/categoryStore";
+import { IconSelect } from "@/components/shared/icon-select";
+import { getIconOption } from "@/constants/icon-options";
 import { cn } from "@/lib/utils";
 
 function toSlug(value: string): string {
-    return value
-        .toLowerCase()
-        .trim()
+    return value.toLowerCase().trim()
         .replace(/[^\w\s-]/g, "")
         .replace(/\s+/g, "-")
         .replace(/-+/g, "-");
 }
 
 export default function CategoryForm() {
-    const { selectedCategory, creating, updating, createCategory, updateCategory, clearSelectedCategory } =
-        useCategoryStore();
+    const {
+        selectedCategory, creating, updating,
+        createCategory, updateCategory, clearSelectedCategory,
+    } = useCategoryStore();
 
     const isEditing = !!selectedCategory;
     const isSubmitting = creating || updating;
@@ -41,22 +37,23 @@ export default function CategoryForm() {
     });
 
     const nameValue = form.watch("name");
+    const iconValue = form.watch("icon");
 
-    // Auto-slug when creating
+    const selectedIconOption = useMemo(
+        () => (iconValue ? getIconOption(iconValue) : undefined),
+        [iconValue]
+    );
+    const PreviewIcon = selectedIconOption?.icon ?? null;
+
     useEffect(() => {
         if (!isEditing && nameValue !== undefined) {
             form.setValue("slug", toSlug(nameValue), { shouldValidate: !!nameValue });
         }
     }, [nameValue, isEditing, form]);
 
-    // Populate form when editing
     useEffect(() => {
         if (selectedCategory) {
-            form.reset({
-                name: selectedCategory.name,
-                slug: selectedCategory.slug,
-                icon: selectedCategory.icon,
-            });
+            form.reset({ name: selectedCategory.name, slug: selectedCategory.slug, icon: selectedCategory.icon });
         } else {
             form.reset({ name: "", slug: "", icon: "" });
         }
@@ -73,137 +70,157 @@ export default function CategoryForm() {
     };
 
     return (
-        <Card className="border-white/[0.06] bg-[#0c0f18] overflow-hidden shadow-xl shadow-black/30">
-            {/* Accent line */}
-            <div className={cn(
-                "h-[2px]",
-                isEditing
-                    ? "bg-gradient-to-r from-transparent via-amber-400 to-transparent"
-                    : "bg-gradient-to-r from-transparent via-cyan-500 to-transparent"
-            )} />
-            <CardHeader className="px-6 pt-5 pb-4">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-3">
-                        <div className={cn(
-                            "w-9 h-9 rounded-xl flex items-center justify-center",
-                            isEditing
-                                ? "bg-amber-500/10 text-amber-400 ring-1 ring-amber-500/20"
-                                : "bg-cyan-500/10 text-cyan-400 ring-1 ring-cyan-500/20"
-                        )}>
-                            {isEditing ? <PenLine size={16} /> : <Plus size={16} />}
-                        </div>
-                        <div>
-                            <h2 className="text-white font-semibold text-sm tracking-tight">
-                                {isEditing ? "Edit Category" : "Create Category"}
-                            </h2>
-                            <p className="text-slate-500 text-xs mt-0.5">
-                                {isEditing ? "Update the selected category" : "Add a new category"}
-                            </p>
-                        </div>
-                    </div>
-                    {isEditing && (
-                        <button
-                            type="button"
-                            onClick={clearSelectedCategory}
-                            className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-500 hover:text-slate-300 hover:bg-white/5 transition-all"
-                        >
-                            <X size={14} />
-                        </button>
-                    )}
-                </div>
-            </CardHeader>
+        // ✅ Form is full height of the panel, flex column, NO overflow-y-auto
+        <div className=" flex flex-col ">
 
-            <CardContent className="px-6 pb-6">
-                <Form {...form}>
-                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <Form {...form}>
+                <form
+                    onSubmit={form.handleSubmit(onSubmit)}
+                    // ✅ form itself is flex column filling available height
+                    className="flex flex-col h-full "
+                >
+                    {/* ── Scrollable fields area ── */}
+                    <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-5 pt-5 pb-3 flex flex-col gap-4">
 
-                        {/* Icon */}
-                        <FormField
-                            control={form.control}
-                            name="icon"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="text-[11px] font-medium tracking-widest text-slate-500 uppercase">
-                                        Icon
-                                    </FormLabel>
-                                    <FormControl>
-                                        <div className="relative">
-                                            <Input
-                                                {...field}
-                                                placeholder="e.g. 🏆"
-                                                className="h-11 rounded-xl bg-white/[0.03] border-white/[0.07] text-white placeholder:text-slate-700 focus-visible:ring-1 focus-visible:ring-cyan-500/40 focus-visible:border-cyan-500/40 text-lg pr-9"
-                                            />
-                                            <Sparkles size={13} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-700" />
-                                        </div>
-                                    </FormControl>
-                                    <FormMessage className="text-rose-400 text-xs" />
-                                </FormItem>
+                        {/* Header */}
+                        <div className="flex items-center justify-between">
+                            <div className="flex items-center gap-2.5">
+                                <div className={cn(
+                                    "w-8 h-8 rounded-lg flex items-center justify-center shrink-0",
+                                    isEditing
+                                        ? "bg-amber-500/15! text-amber-400 border border-amber-500/20!"
+                                        : "bg-teal-500/15 text-teal-400! border border-teal-500/20!"
+                                )}>
+                                    {isEditing ? <PenLine size={14} /> : <Plus size={14} />}
+                                </div>
+                                <span className="text-white font-semibold text-sm">
+                                    {isEditing ? "Edit Category" : "New Category"}
+                                </span>
+                            </div>
+                            {isEditing && (
+                                <button
+                                    type="button"
+                                    onClick={clearSelectedCategory}
+                                    className="w-7 h-7 rounded-lg flex items-center justify-center text-slate-600 hover:text-rose-400 hover:bg-rose-500/10 transition-all"
+                                >
+                                    <X size={16} />
+                                </button>
                             )}
-                        />
+                        </div>
+
+                        {/* Edit badge */}
+                        {isEditing && (
+                            <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-xl bg-amber-500/10 border border-amber-500/20">
+                                <div
+                                    className="w-7 h-7 rounded-lg flex items-center justify-center text-white font-bold text-[10px] tracking-wide shrink-0"
+                                    style={{ background: "linear-gradient(135deg,#06b6d4,#3b82f6)" }}
+                                >
+                                    {selectedCategory?.name?.slice(0, 2).toUpperCase()}
+                                </div>
+                                <span className="text-amber-400 text-xs font-medium truncate">
+                                    Editing: {selectedCategory?.name}
+                                </span>
+                            </div>
+                        )}
 
                         {/* Name */}
-                        <FormField
-                            control={form.control}
-                            name="name"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <FormLabel className="text-[11px] font-medium tracking-widest text-slate-500 uppercase">
-                                        Name
-                                    </FormLabel>
-                                    <FormControl>
-                                        <Input
-                                            {...field}
-                                            placeholder="e.g. Sports & Gaming"
-                                            className="h-11 rounded-xl bg-white/[0.03] border-white/[0.07] text-white placeholder:text-slate-700 focus-visible:ring-1 focus-visible:ring-cyan-500/40 focus-visible:border-cyan-500/40"
-                                        />
-                                    </FormControl>
-                                    <FormMessage className="text-rose-400 text-xs" />
-                                </FormItem>
-                            )}
-                        />
+                        <FormField control={form.control} name="name" render={({ field }) => (
+                            <FormItem>
+                                <FormLabel className="text-[10px] font-semibold tracking-widest text-slate-500 uppercase">
+                                    Name
+                                </FormLabel>
+                                <FormControl>
+                                    <Input {...field} placeholder="e.g. Sports & Gaming"
+                                        className="h-10 rounded-xl bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-700 focus-visible:ring-1 focus-visible:ring-teal-500/50 focus-visible:border-teal-500/40 text-sm"
+                                    />
+                                </FormControl>
+                                <FormMessage className="text-rose-400 text-xs" />
+                            </FormItem>
+                        )} />
 
                         {/* Slug */}
-                        <FormField
-                            control={form.control}
-                            name="slug"
-                            render={({ field }) => (
-                                <FormItem>
-                                    <div className="flex items-center justify-between">
-                                        <FormLabel className="text-[11px] font-medium tracking-widest text-slate-500 uppercase">
-                                            Slug
-                                        </FormLabel>
-                                        {!isEditing && (
-                                            <span className="text-[10px] text-cyan-500/60 tracking-wide">
-                                                Auto-generated
-                                            </span>
-                                        )}
-                                    </div>
-                                    <FormControl>
-                                        <div className="relative">
-                                            <span className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600 text-sm select-none">
-                                                /
-                                            </span>
-                                            <Input
-                                                {...field}
-                                                placeholder="sports-gaming"
-                                                className="h-11 rounded-xl bg-white/[0.03] border-white/[0.07] text-white placeholder:text-slate-700 focus-visible:ring-1 focus-visible:ring-cyan-500/40 focus-visible:border-cyan-500/40 pl-5 font-mono text-sm"
-                                            />
-                                        </div>
-                                    </FormControl>
-                                    <FormMessage className="text-rose-400 text-xs" />
-                                </FormItem>
-                            )}
-                        />
+                        <FormField control={form.control} name="slug" render={({ field }) => (
+                            <FormItem>
+                                <div className="flex items-center justify-between">
+                                    <FormLabel className="text-[10px] font-semibold tracking-widest text-slate-500 uppercase">
+                                        Slug
+                                    </FormLabel>
+                                    {!isEditing && (
+                                        <span className="text-[10px] text-teal-500/70 font-medium">Auto-generated</span>
+                                    )}
+                                </div>
+                                <FormControl>
+                                    <Input {...field} placeholder="sports-gaming"
+                                        className="h-10 rounded-xl bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-700 focus-visible:ring-1 focus-visible:ring-teal-500/50 focus-visible:border-teal-500/40 font-mono text-sm"
+                                    />
+                                </FormControl>
+                                <FormMessage className="text-rose-400 text-xs" />
+                            </FormItem>
+                        )} />
 
-                        {/* Submit */}
+                        {/* Icon */}
+                        <FormField control={form.control} name="icon" render={({ field }) => (
+                            <FormItem>
+                                <FormLabel className="text-[10px] font-semibold tracking-widest text-slate-500 uppercase">
+                                    Icon
+                                </FormLabel>
+                                <FormControl>
+                                    <IconSelect
+                                        value={field.value}
+                                        onChange={field.onChange}
+                                        placeholder="Search and select an icon..."
+                                    />
+                                </FormControl>
+
+                                {/* Live Preview */}
+                                {/* <div className={cn(
+                                    "mt-1.5 rounded-xl border transition-all duration-200",
+                                    selectedIconOption
+                                        ? "border-white/[0.07] bg-white/[0.02]"
+                                        : "border-dashed border-white/[0.06]"
+                                )}>
+                                    {selectedIconOption && PreviewIcon ? (
+                                        <div className="flex items-center gap-3 px-3 py-2.5">
+                                            <div className="w-9 h-9 rounded-xl bg-teal-500/10 border border-teal-500/20 flex items-center justify-center shrink-0">
+                                                <PreviewIcon className="w-5 h-5" style={{ color: "#2dd4bf" }} />
+                                            </div>
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-white text-sm font-medium leading-none">{selectedIconOption.label}</p>
+                                                <p className="text-slate-600 text-[11px] font-mono mt-1">{selectedIconOption.value}</p>
+                                            </div>
+                                            <span className="text-[10px] text-teal-500/60 px-2 py-1 rounded-md bg-teal-500/10 border border-teal-500/15 font-mono shrink-0">
+                                                preview
+                                            </span>
+                                        </div>
+                                    ) : (
+                                        <div className="flex items-center gap-2.5 px-3 py-2.5">
+                                            <div className="w-9 h-9 rounded-xl bg-white/[0.03] border border-dashed border-white/[0.08] flex items-center justify-center shrink-0">
+                                                <span className="text-slate-700 text-base select-none">?</span>
+                                            </div>
+                                            <div>
+                                                <p className="text-slate-600 text-xs font-medium">No icon selected</p>
+                                                <p className="text-slate-700 text-[11px] mt-0.5">Search and pick one above</p>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div> */}
+
+                                <FormMessage className="text-rose-400 text-xs" />
+                            </FormItem>
+                        )} />
+
+                    </div>
+
+                    {/* ── Fixed submit button at bottom ── */}
+                    <div className="shrink-0 px-5 py-4 border-t border-white/5">
                         <Button
                             type="submit"
                             disabled={isSubmitting}
                             className={cn(
-                                "w-full h-11 rounded-xl font-semibold text-sm tracking-tight transition-all duration-200 mt-2",
+                                "w-full h-10 rounded-xl font-semibold text-sm transition-all duration-200",
                                 isEditing
-                                    ? "bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-400 hover:to-orange-400 text-white shadow-lg shadow-amber-500/20 hover:shadow-amber-500/30"
-                                    : "bg-gradient-to-r from-cyan-500 to-blue-600 hover:from-cyan-400 hover:to-blue-500 text-white shadow-lg shadow-cyan-500/20 hover:shadow-cyan-500/30"
+                                    ? "bg-amber-500! hover:bg-amber-400! text-black shadow-lg shadow-amber-500/20"
+                                    : "bg-teal-500! hover:bg-teal-400! text-black shadow-lg shadow-teal-500/20"
                             )}
                         >
                             {isSubmitting ? (
@@ -212,12 +229,16 @@ export default function CategoryForm() {
                                     {isEditing ? "Updating..." : "Creating..."}
                                 </span>
                             ) : (
-                                isEditing ? "Update Category" : "Create Category"
+                                <span className="flex items-center gap-2">
+                                    {isEditing ? <PenLine size={14} /> : <Plus size={14} />}
+                                    {isEditing ? "Update Category" : "Create Category"}
+                                </span>
                             )}
                         </Button>
-                    </form>
-                </Form>
-            </CardContent>
-        </Card>
+                    </div>
+
+                </form>
+            </Form>
+        </div>
     );
 }

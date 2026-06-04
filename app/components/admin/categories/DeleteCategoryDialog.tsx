@@ -35,40 +35,101 @@ export default function DeleteCategoryDialog({
 
     return (
         <AlertDialog open={open} onOpenChange={onOpenChange}>
-            <AlertDialogContent className="bg-[#0c0f18] border border-white/[0.07] rounded-2xl shadow-2xl shadow-black/50 max-w-sm p-0 overflow-hidden">
-                <div className="h-[2px] bg-gradient-to-r from-transparent via-rose-500 to-transparent" />
-                <div className="p-6">
-                    <AlertDialogHeader>
-                        <div className="flex items-start gap-4 mb-1">
-                            <div className="w-10 h-10 rounded-xl bg-rose-500/10 ring-1 ring-rose-500/20 flex items-center justify-center text-rose-400 shrink-0 mt-0.5">
-                                <AlertTriangle size={18} />
+            <AlertDialogContent
+                // ✅ Force dark background directly — overrides shadcn light theme
+                style={{ background: "#0d1117" }}
+                className="
+                    border border-white/[0.08]
+                    rounded-2xl
+                    shadow-2xl shadow-black/80
+                    max-w-md w-full
+                    p-0 gap-0
+                    overflow-hidden
+                    [&>button]:text-slate-500
+                    [&>button]:hover:text-slate-300
+                "
+            >
+                {/* ── Top rose accent line ── */}
+                <div className="h-[2px] w-full bg-gradient-to-r from-transparent via-rose-500/80 to-transparent" />
+
+                <div className="p-6 flex flex-col gap-5">
+
+                    {/* ── Header ── */}
+                    <AlertDialogHeader className="p-0 space-y-0">
+                        <div className="flex items-center gap-3 mb-4">
+                            {/* Rose icon box */}
+                            <div className="w-10 h-10 rounded-xl bg-rose-500/10 border border-rose-500/20 flex items-center justify-center shrink-0">
+                                <AlertTriangle size={18} className="text-rose-400" />
                             </div>
-                            <div>
-                                <AlertDialogTitle className="text-white text-base font-semibold tracking-tight">
-                                    Delete Category
-                                </AlertDialogTitle>
-                                <AlertDialogDescription className="text-slate-400 text-sm leading-relaxed mt-1">
-                                    Are you sure you want to delete{" "}
-                                    <span className="text-white font-medium">
-                                        {category?.icon} {category?.name}
-                                    </span>
-                                    ? This action cannot be undone.
-                                </AlertDialogDescription>
-                            </div>
+                            <AlertDialogTitle
+                                // ✅ Force white text
+                                style={{ color: "#f1f5f9" }}
+                                className="text-base font-semibold tracking-tight"
+                            >
+                                Delete Category
+                            </AlertDialogTitle>
                         </div>
+
+                        {/* Divider */}
+                        <div className="h-px bg-white/[0.06] mb-4" />
+
+                        <AlertDialogDescription
+                            // ✅ Force slate text
+                            style={{ color: "#94a3b8" }}
+                            className="text-sm leading-relaxed"
+                        >
+                            Are you sure you want to delete{" "}
+                            <span style={{ color: "#f1f5f9" }} className="font-semibold">
+                                {category?.name}
+                            </span>
+                            ? This action cannot be undone.
+                        </AlertDialogDescription>
                     </AlertDialogHeader>
 
-                    <AlertDialogFooter className="flex gap-2 mt-6">
+                    {/* ── Buttons ── */}
+                    <AlertDialogFooter className="!flex-row gap-2.5 p-0">
+
+                        {/* Cancel — dark ghost */}
                         <AlertDialogCancel
                             disabled={deleting}
-                            className="flex-1 bg-white/[0.04] border-white/[0.08] text-slate-300 hover:bg-white/[0.08] hover:text-white rounded-xl h-10 hover:border-white/[0.12] transition-all"
+                            style={{
+                                background: "rgba(255,255,255,0.05)",
+                                borderColor: "rgba(255,255,255,0.1)",
+                                color: "#cbd5e1",
+                                transition: "all 150ms ease",
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.background = "rgba(255,255,255,0.10)";
+                                e.currentTarget.style.borderColor = "rgba(255,255,255,0.18)";
+                                e.currentTarget.style.color = "#f1f5f9";
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.background = "rgba(255,255,255,0.05)";
+                                e.currentTarget.style.borderColor = "rgba(255,255,255,0.1)";
+                                e.currentTarget.style.color = "#cbd5e1";
+                            }}
+                            className="flex-1 h-10 rounded-xl text-sm font-medium disabled:opacity-50"
                         >
                             Cancel
                         </AlertDialogCancel>
+
+                        {/* Delete — rose solid */}
                         <Button
                             onClick={handleConfirm}
                             disabled={deleting}
-                            className="flex-1 bg-rose-500/90 hover:bg-rose-500 text-white rounded-xl h-10 shadow-lg shadow-rose-500/20 hover:shadow-rose-500/30 transition-all"
+                            style={{
+                                background: "#e11d48",
+                                transition: "all 150ms ease",
+                            }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.background = "#f43f5e";
+                                e.currentTarget.style.boxShadow = "0 8px 24px rgba(244,63,94,0.35)";
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.background = "#e11d48";
+                                e.currentTarget.style.boxShadow = "0 4px 14px rgba(225,29,72,0.25)";
+                            }}
+                            className="flex-1 h-10 rounded-xl text-white text-sm font-medium shadow-lg shadow-rose-500/25 disabled:opacity-50"
                         >
                             {deleting ? (
                                 <span className="flex items-center gap-2">
@@ -82,6 +143,7 @@ export default function DeleteCategoryDialog({
                                 </span>
                             )}
                         </Button>
+
                     </AlertDialogFooter>
                 </div>
             </AlertDialogContent>

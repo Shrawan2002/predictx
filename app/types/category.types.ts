@@ -28,7 +28,6 @@ export interface UpdateCategoryDto {
     slug?: string;
     icon?: string;
 }
-
 export interface ApiResponse {
     success: boolean;
     message?: string;

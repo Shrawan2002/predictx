@@ -21,7 +21,7 @@ export const categorySchema = z.object({
         .string()
         .trim()
         .min(1, "Category icon name is required")
-        .max(10, "Category icon name must be under 10 characters"),
+        .max(50, "Category icon name must be under 50 characters"),
 });
 
 export type CategoryFormData = z.infer<typeof categorySchema>;

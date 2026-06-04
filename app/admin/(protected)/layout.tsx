@@ -1,70 +1,9 @@
-// "use client";
-
-// import Sidebar from "@/components/admin/layout/Sidebar";
-// import Topbar from "@/components/admin/layout/Topbar";
-// import { useRouter } from "next/navigation";
-// import { useEffect } from "react";
-
-// export default function DashboardLayout({
-//     children,
-// }: {
-//     children: React.ReactNode;
-// }) {
-
-//     const router = useRouter();
-//     const adminToken = sessionStorage.getItem("adminToken");
-
-//     useEffect(() => {
-
-//         if (!adminToken) {
-//             router.replace(
-//                 "/admin/login"
-//             );
-//         }
-
-//     }, [adminToken, router]);
-
-//     // Prevent flash
-//     if (!adminToken) {
-//         return null;
-//     }
-
-//     return (
-//         // ✅ Root: full viewport height, no overflow
-//         <div className="flex h-screen overflow-hidden bg-[#070B14] text-white">
-
-//             {/* ✅ Sidebar: fixed height, internal scroll handled inside Sidebar component */}
-//             <Sidebar />
-
-//             {/* ✅ Right column: fills remaining width, stacks topbar + main vertically */}
-//             <div className="flex flex-1 flex-col min-w-0 overflow-hidden">
-
-//                 {/* ✅ Topbar: sticky at top, never scrolls away */}
-//                 <Topbar />
-
-//                 {/* ✅ Main: only this area scrolls */}
-//                 <main className="flex-1 overflow-y-auto p-6">
-//                     {children}
-//                 </main>
-
-//             </div>
-
-//         </div>
-//     );
-// }
-
-
 "use client";
 
 import Sidebar from "@/components/admin/layout/Sidebar";
 import Topbar from "@/components/admin/layout/Topbar";
-
 import { useRouter } from "next/navigation";
-
-import {
-    useEffect,
-    useState,
-} from "react";
+import { useEffect, useState } from "react";
 import AdminDarkWrapper from "./adminwraper";
 
 export default function DashboardLayout({
@@ -72,63 +11,57 @@ export default function DashboardLayout({
 }: {
     children: React.ReactNode;
 }) {
-
     const router = useRouter();
-
-    const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-    const [loading, setLoading] = useState(true);
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+    const onMenuClick = () => setIsSidebarOpen(!isSidebarOpen);
+    const [checkingAuth, setCheckingAuth] =
+        useState(true);
+
+    // ================= AUTH CHECK =================
+
     useEffect(() => {
-        // SAFE:
-        // runs only in browser
-        const adminToken = sessionStorage.getItem("adminToken");
 
-        if (!adminToken) {
-            router.replace("/admin/login");
+        const token =
+            sessionStorage.getItem(
+                "adminToken"
+            );
+
+        if (!token) {
+            router.replace(
+                "/admin/login"
+            );
         } else {
-            setIsAuthenticated(true);
+            setCheckingAuth(false);
         }
-
-        setLoading(false);
 
     }, [router]);
 
-    // LOADING SCREEN
-    if (loading) {
+    // ================= LOADER =================
+
+    if (checkingAuth) {
         return (
-            <div className="h-screen flex items-center justify-center bg-[#070B14] text-white">
-                Loading...
+            <div className="min-h-screen flex items-center justify-center bg-[#050816]">
+                <p className="text-white text-sm">
+                    Loading...
+                </p>
             </div>
         );
     }
 
-    // PREVENT FLASH
-    if (!isAuthenticated) {
-        return null;
-    }
-
-    const onMenuClick = () => {
-        setIsSidebarOpen(!isSidebarOpen);
-    };
-
     return (
-        // ROOT
         <AdminDarkWrapper>
             <div className="flex h-screen overflow-hidden bg-[#070B14] text-white">
 
-                {/* SIDEBAR */}
                 <Sidebar isSidebarOpen={isSidebarOpen} onMenuClick={onMenuClick} />
 
-                {/* RIGHT SIDE */}
                 <div className="flex flex-1 flex-col min-w-0 overflow-hidden">
 
-                    {/* TOPBAR */}
+                    {/* Topbar — always fixed at top, never scrolls */}
                     <Topbar onMenuClick={onMenuClick} />
 
-                    {/* MAIN CONTENT */}
-                    <main className="flex-1 overflow-y-auto p-6">
+                    {/* ✅ Main content — scrolls BELOW the topbar */}
+                    <main className="flex-1 overflow-y-auto min-h-0">
                         {children}
                     </main>
 

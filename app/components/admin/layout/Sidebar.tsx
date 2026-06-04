@@ -19,6 +19,7 @@ export const navSections = [
             { label: "Dashboard", icon: LayoutDashboard, href: "/admin/dashboard" },
             { label: "Markets", icon: TrendingUp, badge: 142, badgeColor: "emerald", href: "/admin/markets" },
             { label: "Categories", icon: TrendingUp, badge: 142, badgeColor: "emerald", href: "/admin/categories" },
+            { label: "Subcategories", icon: TrendingUp, badge: 142, badgeColor: "emerald", href: "/admin/subcategories" },
             { label: "Order Books", icon: BookOpen, href: "/admin/order-books" },
             { label: "Live Trades", icon: Activity, href: "/admin/live-trades" },
         ],

@@ -1,5 +1,5 @@
 
-import type { Category, CreateCategoryDto, UpdateCategoryDto, ApiResponse } from "@/types/category.types";
+import type { Category, CreateCategoryDto, UpdateCategoryDto, } from "@/types/category.types";
 import { apiFetch } from "@/lib/api";
 
 // const api = axios.create({
@@ -27,39 +27,62 @@ import { apiFetch } from "@/lib/api";
 // );
 
 
+// export const categoryService = {
+//     getCategories: async (): Promise<ApiResponse> => {
+//         return await apiFetch.get("/category");
+//     },
+
+//     // createCategory: async (payload: CreateCategoryDto): Promise<Category> => {
+//     //     const { data } = await api.post<ApiResponse<Category>>("/api/admin/categories", payload);
+//     //     return data.data;
+//     // },
+
+//     createCategory: async (payload: CreateCategoryDto): Promise<ApiResponse> => {
+//         return await apiFetch.post("/category", payload);
+
+//         // return data.data;
+//     },
+
+//     updateCategory: async (id: number, payload: UpdateCategoryDto): Promise<ApiResponse> => {
+//         return await apiFetch.patch(`/category/${id}`, payload);
+
+//         // return data;
+//     },
+
+//     deleteCategory: async (id: number): Promise<ApiResponse> => {
+//         return await apiFetch.delete(`/category/${id}`);
+//     },
+// };
+
+
+
+interface ApiResponse<T = unknown> {
+    success: boolean;
+    message: string;
+    data: T;
+}
+
 export const categoryService = {
-    getCategories: async (): Promise<ApiResponse> => {
-        return await apiFetch("/category", {
-            method: "GET",
-        });
+
+    // ✅ { data } destructures axios wrapper → data = your API body
+    getCategories: async (): Promise<ApiResponse<Category[]>> => {
+        const { data } = await apiFetch.get("/category");
+        console.log("apiFetch", data);
+        return data;
     },
 
-    // createCategory: async (payload: CreateCategoryDto): Promise<Category> => {
-    //     const { data } = await api.post<ApiResponse<Category>>("/api/admin/categories", payload);
-    //     return data.data;
-    // },
-
-    createCategory: async (payload: CreateCategoryDto): Promise<ApiResponse> => {
-        return await apiFetch("/category", {
-            method: "POST",
-            body: JSON.stringify(payload),
-        });
-
-        // return data.data;
+    createCategory: async (payload: CreateCategoryDto): Promise<ApiResponse<Category>> => {
+        const { data } = await apiFetch.post("/category", payload);
+        return data;
     },
 
-    updateCategory: async (id: string, payload: UpdateCategoryDto): Promise<ApiResponse> => {
-        return await apiFetch(`/category/${id}`, {
-            method: "PATCH",
-            body: JSON.stringify(payload),
-        });
-
-        // return data;
+    updateCategory: async (id: number, payload: UpdateCategoryDto): Promise<ApiResponse<Category>> => {
+        const { data } = await apiFetch.patch(`/category/${id}`, payload);
+        return data;
     },
 
-    deleteCategory: async (id: string): Promise<ApiResponse> => {
-        return await apiFetch(`/category/${id}`, {
-            method: "DELETE",
-        });
+    deleteCategory: async (id: number): Promise<ApiResponse<void>> => {
+        const { data } = await apiFetch.delete(`/category/${id}`);
+        return data;
     },
 };

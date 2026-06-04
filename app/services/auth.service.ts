@@ -1,5 +1,6 @@
 import { apiFetch } from "@/lib/api";
 
+// ── Payload types ──────────────────────────────────────────
 interface SignupPayload {
     name: string;
     email: string;
@@ -7,6 +8,7 @@ interface SignupPayload {
     referralCode?: string;
 }
 
+// ── Response types ─────────────────────────────────────────
 export interface User {
     id: string;
     name: string;
@@ -34,7 +36,6 @@ export interface AuthResponse {
 export interface AdminAuthResponse {
     success: boolean;
     message: string;
-
     data: {
         admin: AdminUser;
         access_token: string;
@@ -57,111 +58,60 @@ interface AdminProfileResponse {
     };
 }
 
+// ── Service ────────────────────────────────────────────────
 export const authService = {
-    // ================= LOGIN =================
 
-    login: async (
-        email: string,
-        password: string
-    ): Promise<AuthResponse> => {
-        return apiFetch("/auth/login", {
-            method: "POST",
-
-            body: JSON.stringify({
-                email,
-                password,
-            }),
-        });
+    // ================= USER LOGIN =================
+    login: async (email: string, password: string): Promise<AuthResponse> => {
+        const { data } = await apiFetch.post("/auth/login", { email, password });
+        return data;
     },
 
     // ================= SIGNUP =================
-
-    signup: async (
-        payload: SignupPayload
-    ): Promise<{ message: string }> => {
-        return apiFetch("/auth/register", {
-            method: "POST",
-            body: JSON.stringify(payload),
-        });
+    signup: async (payload: SignupPayload): Promise<{ message: string }> => {
+        const { data } = await apiFetch.post("/auth/register", payload);
+        return data;
     },
 
     // ================= VERIFY OTP =================
-
-    verifyOtp: async (
-        email: string,
-        otp: string
-    ): Promise<AuthResponse> => {
-        return apiFetch("/auth/verify-register-otp", {
-            method: "POST",
-
-            body: JSON.stringify({
-                email,
-                otp,
-            }),
-        });
+    verifyOtp: async (email: string, otp: string): Promise<AuthResponse> => {
+        const { data } = await apiFetch.post("/auth/verify-register-otp", { email, otp });
+        return data;
     },
 
     // ================= RESEND OTP =================
-
-    resendOtp: async (
-        email: string
-    ): Promise<{ message: string }> => {
-        return apiFetch("/auth/resend-otp", {
-            method: "POST",
-
-            body: JSON.stringify({
-                email,
-            }),
-        });
+    resendOtp: async (email: string): Promise<{ message: string }> => {
+        const { data } = await apiFetch.post("/auth/resend-otp", { email });
+        return data;
     },
 
-    // ================= PROFILE =================
-
+    // ================= USER PROFILE =================
     getProfile: async (): Promise<ProfileResponse> => {
-        return apiFetch("/auth/me", {
-            method: "GET",
-        });
+        const { data } = await apiFetch.get("/auth/me");
+        return data;
     },
 
     // ================= USER LOGOUT =================
-
     logout: async (): Promise<{ message: string }> => {
-        return apiFetch("/auth/logout", {
-            method: "DELETE",
-        });
+        const { data } = await apiFetch.delete("/auth/logout");
+        return data;
     },
 
     // ================= ADMIN LOGIN =================
-
     adminLogin: async (email: string, password: string): Promise<AdminAuthResponse> => {
-        return apiFetch("/admin/auth/login", {
-            method: "POST",
-            body: JSON.stringify({
-                email,
-                password,
-            }),
-        });
+        const { data } = await apiFetch.post("/admin/auth/login", { email, password });
+        return data;
     },
 
     // ================= ADMIN PROFILE =================
-
     getAdminProfile: async (): Promise<AdminProfileResponse> => {
-        return apiFetch("/admin/auth/me", {
-            method: "GET",
-        });
+        const { data } = await apiFetch.get("/admin/auth/me");
+        return data;
     },
 
     // ================= ADMIN LOGOUT =================
-
     adminLogout: async (): Promise<{ message: string }> => {
-        return apiFetch("/admin/auth/logout", {
-            method: "DELETE",
-        });
+        const { data } = await apiFetch.delete("/admin/auth/logout");
+        return data;
     },
-
-
 };
-
-
-
-

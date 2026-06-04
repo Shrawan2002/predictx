@@ -25,12 +25,12 @@
 
 
 
-import { useAuthStore }
-    from "@/store/authStore";
+// import { useAuthStore }
+//     from "@/store/authStore";
 
-const API_URL =
-    process.env.NEXT_PUBLIC_API_URL;
-let isLoggingOut = false;
+// const API_URL =
+//     process.env.NEXT_PUBLIC_API_URL;
+// let isLoggingOut = false;
 
 // export async function apiFetch(endpoint: string, options?: RequestInit) {
 //     const token = useAuthStore.getState().token;
@@ -158,56 +158,109 @@ let isLoggingOut = false;
 // }
 
 
-export async function apiFetch(endpoint: string, options?: RequestInit) {
+// export async function apiFetch(endpoint: string, options?: RequestInit) {
 
-    // USER TOKEN
-    const token = sessionStorage.getItem("token");
+//     // USER TOKEN
+//     const token = sessionStorage.getItem("token");
 
-    // ADMIN TOKEN
-    const adminToken = sessionStorage.getItem("adminToken");
+//     // ADMIN TOKEN
+//     const adminToken = sessionStorage.getItem("adminToken");
 
-    // PRIORITY
-    const accessToken = adminToken || token;
+//     // PRIORITY
+//     const accessToken = adminToken || token;
 
-    const response = await fetch(`${API_URL}${endpoint}`, {
-        ...options,
-        headers: {
-            "Content-Type": "application/json",
-            ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
-            ...(options?.headers || {}),
-        },
-    });
+//     const response = await fetch(`${API_URL}${endpoint}`, {
+//         ...options,
+//         headers: {
+//             "Content-Type": "application/json",
+//             ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
+//             ...(options?.headers || {}),
+//         },
+//     });
 
-    const data = await response.json().catch(() => null);
+//     const data = await response.json().catch(() => null);
 
-    // ================= 401 =================
-    if (response.status === 401) {
-        sessionStorage.removeItem("token");
-        sessionStorage.removeItem("adminToken");
-        throw new Error(data?.message || "Unauthorized");
+//     // ================= 401 =================
+//     if (response.status === 401) {
+//         sessionStorage.removeItem("token");
+//         sessionStorage.removeItem("adminToken");
+//         throw new Error(data?.message || "Unauthorized");
+//     }
+
+//     // =================OTHER ERRORS =================
+//     if (!response.ok) {
+//         throw new Error(data?.message || "Something went wrong");
+//     }
+
+//     return data;
+// }
+
+// export async function fetchMarkets(category?: string, status?: string) {
+//     const params = new URLSearchParams();
+//     if (category) params.set("category", category);
+//     if (status) params.set("status", status);
+//     const queryString = params.toString();
+//     return apiFetch(`/market${queryString ? `?${queryString}` : ""}`);
+// }
+// export async function fetchMarketById(id: string) {
+//     return apiFetch(`/market/${id}`);
+// }
+// export async function fetchMarketOrderBook(id: string) {
+//     return apiFetch(`/market/${id}/orderbook`);
+// }
+// export async function fetchMarketTrades(id: string) {
+//     return apiFetch(`/market/${id}/trades`);
+// }
+
+
+import axios from "axios";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+
+// ── Create instance ────────────────────────────────────────
+export const apiFetch = axios.create({
+    baseURL: API_URL,
+    headers: {
+        "Content-Type": "application/json",
+    },
+});
+
+// ── Request interceptor — attach token ─────────────────────
+apiFetch.interceptors.request.use(
+    (config) => {
+        if (typeof window !== "undefined") {
+            // ✅ Same priority logic as your apiFetch
+            const adminToken = sessionStorage.getItem("adminToken");
+            const userToken = sessionStorage.getItem("token");
+            const accessToken = adminToken || userToken;
+
+            if (accessToken) {
+                config.headers.Authorization = `Bearer ${accessToken}`;
+            }
+        }
+        return config;
+    },
+    (error) => Promise.reject(error)
+);
+
+// ── Response interceptor — handle 401 + errors ─────────────
+apiFetch.interceptors.response.use(
+    // ✅ Success — return response as-is
+    (response) => response,
+
+    // ✅ Error — mirror your apiFetch error handling
+    (error) => {
+        const status = error.response?.status;
+        const message = error.response?.data?.message || error.message || "Something went wrong";
+
+        // 401 — clear both tokens, same as apiFetch
+        if (status === 401) {
+            if (typeof window !== "undefined") {
+                sessionStorage.removeItem("token");
+                sessionStorage.removeItem("adminToken");
+            }
+        }
+
+        return Promise.reject(new Error(message));
     }
-
-    // =================OTHER ERRORS =================
-    if (!response.ok) {
-        throw new Error(data?.message || "Something went wrong");
-    }
-
-    return data;
-}
-
-export async function fetchMarkets(category?: string, status?: string) {
-    const params = new URLSearchParams();
-    if (category) params.set("category", category);
-    if (status) params.set("status", status);
-    const queryString = params.toString();
-    return apiFetch(`/market${queryString ? `?${queryString}` : ""}`);
-}
-export async function fetchMarketById(id: string) {
-    return apiFetch(`/market/${id}`);
-}
-export async function fetchMarketOrderBook(id: string) {
-    return apiFetch(`/market/${id}/orderbook`);
-}
-export async function fetchMarketTrades(id: string) {
-    return apiFetch(`/market/${id}/trades`);
-}
+);

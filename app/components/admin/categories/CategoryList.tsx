@@ -1,25 +1,29 @@
 "use client";
 
 import { useState } from "react";
-import { Search, Layers, SlidersHorizontal } from "lucide-react";
+import { Search } from "lucide-react";
 import { Input } from "@/components/ui/input";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { useCategoryStore } from "@/store/categoryStore";
 import CategoryCard from "./CategoryCard";
 import DeleteCategoryDialog from "./DeleteCategoryDialog";
 import type { Category } from "@/types/category.types";
 
-function SkeletonCard() {
+function SkeletonRow() {
     return (
-        <div className="flex items-center gap-3.5 px-4 py-3 rounded-xl border border-white/[0.04] bg-white/[0.01] animate-pulse">
-            <div className="w-9 h-9 rounded-lg bg-white/[0.05] shrink-0" />
-            <div className="flex-1 space-y-2">
-                <div className="h-3 w-28 bg-white/[0.06] rounded-full" />
-                <div className="h-2.5 w-20 bg-white/[0.04] rounded-full" />
+        <div className="flex items-center gap-4 px-5 h-[64px] border-b border-white/[0.04] animate-pulse">
+            <div className="flex items-center gap-3 flex-1 min-w-0">
+                <div className="w-8 h-8 rounded-lg bg-white/[0.05] shrink-0" />
+                <div className="flex flex-col gap-2">
+                    <div className="h-3 w-28 bg-white/[0.06] rounded" />
+                    <div className="h-2 w-20 bg-white/[0.04] rounded" />
+                </div>
             </div>
-            <div className="flex gap-1">
-                <div className="w-8 h-8 rounded-lg bg-white/[0.04]" />
-                <div className="w-8 h-8 rounded-lg bg-white/[0.04]" />
+            <div className="w-[110px] shrink-0 flex justify-end">
+                <div className="h-2.5 w-16 bg-white/[0.04] rounded" />
+            </div>
+            <div className="w-[62px] shrink-0 flex gap-1 justify-end">
+                <div className="w-7 h-7 rounded-lg bg-white/[0.04]" />
+                <div className="w-7 h-7 rounded-lg bg-white/[0.04]" />
             </div>
         </div>
     );
@@ -47,8 +51,7 @@ export default function CategoryList() {
 
     const handleEditClick = (category: Category) => {
         setSelectedCategory(category);
-        // Scroll form into view on mobile
-        if (window.innerWidth < 1024) {
+        if (typeof window !== "undefined" && window.innerWidth < 1024) {
             document.getElementById("category-form")?.scrollIntoView({ behavior: "smooth" });
         }
     };
@@ -60,70 +63,64 @@ export default function CategoryList() {
 
     return (
         <>
-            <Card className="border-white/[0.06] bg-[#0c0f18] overflow-hidden shadow-xl shadow-black/30 flex flex-col h-full">
-                <div className="h-[2px] bg-gradient-to-r from-transparent via-violet-500/70 to-transparent" />
+            {/* ✅ CHANGE 1: removed overflow-hidden, added flex-1 so it fills parent height */}
+            <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
 
-                <CardHeader className="px-6 pt-5 pb-4 shrink-0">
-                    {/* Header row */}
-                    <div className="flex items-center justify-between mb-4">
-                        <div className="flex items-center gap-3">
-                            <div className="w-9 h-9 rounded-xl bg-violet-500/10 text-violet-400 ring-1 ring-violet-500/20 flex items-center justify-center">
-                                <Layers size={16} />
-                            </div>
-                            <div>
-                                <h2 className="text-white font-semibold text-sm tracking-tight">
-                                    Categories
-                                </h2>
-                                <p className="text-slate-500 text-xs mt-0.5">
-                                    {loading ? "Loading..." : `${categories.length} total`}
-                                </p>
-                            </div>
-                        </div>
-                        <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg bg-white/[0.03] border border-white/[0.06] text-slate-500">
-                            <SlidersHorizontal size={11} aria-hidden="true" />
-                            <span className="text-[11px]">All</span>
-                        </div>
+                {/* ── List header bar — no change here ── */}
+                <div className="shrink-0 flex items-center justify-between px-5 py-3.5 border-b border-white/6 bg-[#0c0f1a]">
+                    <div className="flex items-center gap-2">
+                        <span className="text-white text-sm font-semibold">All Categories</span>
+                        <span className="text-[11px] text-slate-500">
+                            {loading ? "..." : `${categories.length} total`}
+                        </span>
                     </div>
-
-                    {/* Search */}
-                    <div className="relative">
-                        <Search
-                            size={13}
-                            className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-600 pointer-events-none"
-                            aria-hidden="true"
-                        />
+                    <div className="relative w-52">
+                        <Search size={12} className="absolute left-3  top-1/2 -translate-y-1/2 text-slate-600 pointer-events-none" />
                         <Input
-                            placeholder="Search by name or slug..."
+                            placeholder="Search categories..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            className="pl-9 h-10 bg-white/[0.03] border-white/[0.07] text-white placeholder:text-slate-700 focus-visible:ring-1 focus-visible:ring-violet-500/40 focus-visible:border-violet-500/40 rounded-xl text-sm"
+                            className="h-8 pl-10 bg-[#111520] border-white/8 text-white placeholder:text-slate-700 focus-visible:ring-1 focus-visible:ring-teal-500/40 focus-visible:border-teal-500/30 rounded-lg text-xs"
                         />
                     </div>
-                </CardHeader>
-
-                <CardContent className="px-6 pb-6 flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                </div>
+                {/* ── Column headers — no change here ── */}
+                <div className="shrink-0 flex items-center gap-4 px-5 py-2.5 border-b border-white/[0.04] bg-[#0a0d14]">
+                    <div className="flex-1 min-w-0">
+                        <span className="text-[9px] font-bold tracking-widest text-slate-600 uppercase">
+                            Name / Slug
+                        </span>
+                    </div>
+                    <div className="w-[110px] shrink-0 text-right">
+                        <span className="text-[9px] font-bold tracking-widest text-slate-600 uppercase">
+                            Created
+                        </span>
+                    </div>
+                    <div className="w-[62px] shrink-0" />
+                </div>
+                {/* ✅ CHANGE 2: h-[500px] fixes the rows area height + hidden scrollbar */}
+                <div className="overflow-y-auto"
+                    style={{ height: 300 }}>
                     {loading ? (
-                        <div className="space-y-2">
-                            {Array.from({ length: 6 }).map((_, i) => (
-                                <SkeletonCard key={i} />
-                            ))}
-                        </div>
+                        <>
+                            {Array.from({ length: 5 }).map((_, i) => <SkeletonRow key={i} />)}
+                        </>
                     ) : filtered.length === 0 ? (
-                        <div className="flex flex-col items-center justify-center py-14 text-center">
-                            <div className="w-14 h-14 rounded-2xl bg-white/[0.03] border border-white/[0.06] flex items-center justify-center text-2xl mb-4 select-none">
+                        <div className="flex flex-col items-center justify-center py-20 text-center">
+                            <div className="w-14 h-14 rounded-2xl bg-white/3 border border-dashed border-white/1 flex items-center justify-center text-2xl mb-4">
                                 {search ? "🔍" : "📂"}
                             </div>
                             <p className="text-slate-400 text-sm font-medium">
                                 {search ? "No results found" : "No categories yet"}
                             </p>
-                            <p className="text-slate-600 text-xs mt-1 max-w-[200px] leading-relaxed">
+                            <p className="text-slate-600 text-xs mt-1 max-w-[180px] leading-relaxed">
                                 {search
-                                    ? `No categories match "${search}"`
-                                    : "Create your first category using the form on the left"}
+                                    ? `Nothing matches "${search}"`
+                                    : "Create your first category using the form"}
                             </p>
                         </div>
                     ) : (
-                        <div className="space-y-1.5">
+                        <>
                             {filtered.map((category) => (
                                 <CategoryCard
                                     key={category.id}
@@ -134,10 +131,10 @@ export default function CategoryList() {
                                     isSelected={selectedCategory?.id === category.id}
                                 />
                             ))}
-                        </div>
+                        </>
                     )}
-                </CardContent>
-            </Card>
+                </div>
+            </div>
 
             <DeleteCategoryDialog
                 category={deleteTarget}
