@@ -447,3 +447,68 @@
 [data-radix-scroll-area-scrollbar] {
     display: none !important;
 }
+
+
+/* =========================================================
+   ADMIN PANEL — ALWAYS DARK
+   Targets [data-theme="dark"] so it wins over user's
+   light/dark preference without touching :root or html
+========================================================= */
+
+[data-theme="dark"],
+[data-theme="dark"] * {
+    color-scheme: dark;
+}
+
+/* Override all CSS variables inside admin wrapper */
+[data-theme="dark"] {
+    --background:          #070B14;
+    --foreground:          oklch(0.98 0.002 240);
+    --card:                oklch(0.13 0.008 240);
+    --card-foreground:     oklch(0.98 0.002 240);
+    --popover:             #0f1320;
+    --popover-foreground:  oklch(0.98 0.002 240);
+    --primary:             oklch(0.7 0.22 262);
+    --primary-foreground:  oklch(0.98 0.002 240);
+    --secondary:           oklch(0.18 0.008 240);
+    --secondary-foreground:oklch(0.98 0.002 240);
+    --muted:               oklch(0.18 0.008 240);
+    --muted-foreground:    oklch(0.6 0.01 240);
+    --accent:              oklch(0.18 0.008 240);
+    --accent-foreground:   oklch(0.98 0.002 240);
+    --destructive:         oklch(0.67 0.22 25);
+    --border:              oklch(1 0 0 / 7%);
+    --input:               oklch(1 0 0 / 8%);
+    --ring:                oklch(0.7 0.22 262);
+
+    /* Kill the light-theme body gradient inside admin */
+    background-color: #070B14;
+    background-image: none;
+    color: oklch(0.98 0.002 240);
+}
+
+/* Inputs/buttons inside admin always dark */
+[data-theme="dark"] input,
+[data-theme="dark"] textarea,
+[data-theme="dark"] select,
+[data-theme="dark"] button {
+    color-scheme: dark;
+}
+
+/* Desktop sidebar — always visible regardless of JS state */
+@media (min-width: 1024px) {
+    [data-sidebar="true"] {
+        position: relative !important;
+        transform: translateX(0) !important;
+        z-index: auto !important;
+    }
+}
+
+@media (min-width: 1024px) {
+    [data-sidebar="true"] {
+        position: relative !important;
+        transform: translateX(0) !important;
+    }
+}
+
+

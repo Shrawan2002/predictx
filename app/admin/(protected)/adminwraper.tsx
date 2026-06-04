@@ -1,5 +1,4 @@
 // components/admin/layout/AdminDarkWrapper.tsx
-// ✅ Forces dark mode only for admin pages — doesn't affect the rest of the app
 
 export default function AdminDarkWrapper({
     children,
@@ -7,13 +6,16 @@ export default function AdminDarkWrapper({
     children: React.ReactNode;
 }) {
     return (
+        // ✅ data-theme="dark" + class="dark" — both needed:
+        // - class="dark" activates Tailwind dark: variants
+        // - data-theme="dark" is targeted by CSS to override CSS variables
+        // - colorScheme tells browser this is a dark surface
         <div
             className="dark"
+            data-theme="dark"
             style={{ colorScheme: "dark" }}
         >
-            <div className="bg-[#070B14] text-white min-h-screen">
-                {children}
-            </div>
+            {children}
         </div>
     );
 }
