@@ -94,7 +94,7 @@ export default function SubcategoryForm() {
                 <form onSubmit={form.handleSubmit(onSubmit)} className="flex flex-col h-full">
 
                     {/* ── Scrollable area ── */}
-                    <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-6 pt-6 pb-4 gap-6 flex flex-col ">
+                    <div className="flex-1 overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none] px-6 pt-6 pb-3 gap-6 flex flex-col ">
 
                         {/* ── Header ── */}
                         <div className="flex items-center justify-between">

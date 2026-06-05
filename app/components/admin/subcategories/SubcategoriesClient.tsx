@@ -6,29 +6,29 @@ import { useSubCategoryStore } from "@/store/subCategoryStore";
 import { useCategoryStore } from "@/store/categoryStore";
 import SubcategoryForm from "./SubcategoryForm";
 import SubcategoryList from "./SubcategoryList";
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 
 export default function SubcategoriesClient() {
     const { fetchSubCategories, loading, categoryWithSubCategories } = useSubCategoryStore();
     const { fetchCategories, categories } = useCategoryStore();
     const [mobileFormOpen, setMobileFormOpen] = useState(false);
 
-    // Fetch both on mount
     useEffect(() => {
         fetchSubCategories();
         if (categories.length === 0) fetchCategories();
-    }, [fetchSubCategories, fetchCategories, categories.length]);
+    }, []);
     return (
         <div className="flex flex-col h-full min-h-0 bg-linear-to-br from-[#020817] to-[#0B1120] overflow-hidden">
             {/* Header */}
             <div className="
-        shrink-0
-        px-6
-        py-5
-        border-b
-        border-white/5
-        bg-[#020817]/95
-        backdrop-blur-xl
-    ">
+                    shrink-0
+                    px-6
+                    py-5
+                    border-b
+                    border-white/5
+                    bg-[#020817]/95
+                    backdrop-blur-xl
+                 ">
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
                         <div className="
@@ -147,6 +147,17 @@ export default function SubcategoriesClient() {
                     </div>
                 </div>
             </div>
+            <Sheet open={mobileFormOpen} onOpenChange={setMobileFormOpen}>
+                <SheetContent
+                    side="right"
+                    className="p-0 flex flex-col h-full overflow-hidden"
+                >
+                    <SheetTitle className="p-2 mt-4 mx-3 border-b border-white/[0.06] backdrop-blur-md text-lg font-semibold">
+                        Add Subcategory
+                    </SheetTitle>
+                    <SubcategoryForm />
+                </SheetContent>
+            </Sheet>
         </div>
     );
 }
