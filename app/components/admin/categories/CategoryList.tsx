@@ -10,7 +10,11 @@ import type { Category } from "@/types/category.types";
 
 function SkeletonRow() {
     return (
-        <div className="flex items-center gap-4 px-5 h-[64px] border-b border-zinc-800/40 animate-pulse">
+        <div className="flex items-center gap-4 px-5 h-[84px] rounded-2xl
+                        border
+                        border-white/5
+                        bg-white/2
+                        mb-3 animate-pulse">
             <div className="flex items-center gap-3 flex-1 min-w-0">
                 <div className="w-8 h-8 rounded-lg bg-zinc-800 shrink-0" />
                 <div className="flex flex-col gap-2">
@@ -58,29 +62,39 @@ export default function CategoryList() {
 
     return (
         <>
-            <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="flex flex-col flex-1 min-h-0 overflow-hidden rounded-3xl">
 
                 {/* ── List header ── */}
-                <div className="shrink-0 flex items-center justify-between px-5 py-3.5 border-b border-zinc-800/60 bg-zinc-900/40">
+                <div className="shrink-0
+                        flex
+                    items-center
+                    justify-between
+                    px-6
+                    py-5
+                    border-b
+                    border-white/6
+                    bg-white/2
+                    backdrop-blur-xl">
                     <div className="flex items-center gap-2">
-                        <span className="text-white text-sm font-semibold">All Categories</span>
-                        <span className="text-[11px] text-zinc-500">
+                        <span className="text-white text-base font-semibold">All Categories</span>
+                        <span className="text-[11px] text-slate-400">
                             {loading ? "..." : `${categories.length} total`}
                         </span>
                     </div>
-                    <div className="relative w-52">
+                    <div className="relative w-64">
                         <Search size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-zinc-600 pointer-events-none" />
                         <Input
                             placeholder="Search categories..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            className="h-8 pl-8 bg-zinc-800/40 border-zinc-700/60 text-white placeholder:text-zinc-700 focus-visible:ring-1 focus-visible:ring-teal-500/40 rounded-lg text-xs"
+                            className="h-10 pl-8 bg-[#111827] border-white/60 text-white placeholder:text-slate-500 
+                            focus-visible:ring-1 focus-visible:ring-cyan-500/20 rounded-xl text-xs"
                         />
                     </div>
                 </div>
 
                 {/* ── Column headers ── */}
-                <div className="shrink-0 flex items-center gap-4 px-5 py-2.5 border-b border-zinc-800/40 bg-zinc-950/60">
+                {/* <div className="shrink-0 flex items-center gap-4 px-5 py-2.5 border-b border-white/[0.06]/40 bg-zinc-950/60">
                     <div className="flex-1 min-w-0">
                         <span className="text-[9px] font-bold tracking-widest text-zinc-600 uppercase">Name / Slug</span>
                     </div>
@@ -88,15 +102,15 @@ export default function CategoryList() {
                         <span className="text-[9px] font-bold tracking-widest text-zinc-600 uppercase">Created</span>
                     </div>
                     <div className="w-[62px] shrink-0" />
-                </div>
+                </div> */}
 
                 {/* ── Rows ── */}
-                <div className="h-[500px] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+                <div className="flex-1 overflow-y-auto px-5 py-4 space-y-3 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                     {loading ? (
                         Array.from({ length: 5 }).map((_, i) => <SkeletonRow key={i} />)
                     ) : filtered.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-20 text-center">
-                            <div className="w-14 h-14 rounded-2xl bg-zinc-800/40 border border-dashed border-zinc-700/60 flex items-center justify-center text-2xl mb-4">
+                            <div className="w-20 h-20 rounded-3xl bg-cyan-500/10 border border-dashed border-cyan-500/20 flex items-center justify-center text-3xl mb-4">
                                 {search ? "🔍" : "📂"}
                             </div>
                             <p className="text-zinc-400 text-sm font-medium">
@@ -107,16 +121,18 @@ export default function CategoryList() {
                             </p>
                         </div>
                     ) : (
-                        filtered.map((category) => (
-                            <CategoryCard
-                                key={category.id}
-                                category={category}
-                                onEdit={() => handleEditClick(category)}
-                                onDelete={() => handleDeleteClick(category)}
-                                isDeleting={deleting && deleteTarget?.id === category.id}
-                                isSelected={selectedCategory?.id === category.id}
-                            />
-                        ))
+                        <div className="space-y-3">
+                            {filtered.map((category) => (
+                                <CategoryCard
+                                    key={category.id}
+                                    category={category}
+                                    onEdit={() => handleEditClick(category)}
+                                    onDelete={() => handleDeleteClick(category)}
+                                    isDeleting={deleting && deleteTarget?.id === category.id}
+                                    isSelected={selectedCategory?.id === category.id}
+                                />
+                            ))}
+                        </div>
                     )}
                 </div>
             </div>

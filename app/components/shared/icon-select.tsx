@@ -81,11 +81,11 @@ export function IconSelect({
                 disabled={disabled}
                 onClick={() => setOpen((prev) => !prev)}
                 className={cn(
-                    "w-full h-10 px-3 flex items-center justify-between gap-3 rounded-xl",
-                    "bg-white/4 border text-left text-sm",
+                    "w-full h-11 px-4 flex items-center justify-between gap-3 rounded-xl",
+                    "bg-white/[0.03] border text-left text-sm",
                     "transition-all duration-150",
                     open
-                        ? "border-teal-500/50! ring-1 ring-teal-500/30! bg-white/6"
+                        ? "border-cyan-500/40 ring-2 ring-cyan-500/15 shadow-[0_0_0_1px_rgba(6,182,212,0.15)] bg-white/6"
                         : "border-white/8 hover:border-white/[0.14] hover:bg-white/6",
                     disabled && "opacity-50 cursor-not-allowed",
                     className
@@ -94,13 +94,13 @@ export function IconSelect({
                 <span className="flex items-center gap-2 min-w-0 flex-1">
                     {SelectedIcon ? (
                         <>
-                            <span className="w-6 h-6 rounded-md bg-teal-500/15 border border-teal-500/20 flex items-center justify-center shrink-0">
+                            <span className="w-8 h-8 rounded-xl bg-cyan-500/15 border border-cyan-500/25 flex items-center justify-center shrink-0">
                                 <SelectedIcon className="w-3.5 h-3.5" style={{ color: "#2dd4bf" }} />
                             </span>
                             <span className="text-white truncate text-sm">{selected!.label}</span>
                         </>
                     ) : (
-                        <span className="text-slate-500 truncate">{placeholder}</span>
+                        <span className="text-slate-400 truncate">{placeholder}</span>
                     )}
                 </span>
                 <ChevronDown
@@ -123,22 +123,22 @@ export function IconSelect({
                     role="listbox"
                     className={cn(
                         "absolute left-0 right-0 top-[calc(100%+6px)] z-50",
-                        "bg-[#0f1320] border border-white/[0.09] rounded-xl",
-                        "shadow-2xl shadow-black/70",
+                        "bg-[#0F172A] border border-white/6 rounded-2xl",
+                        "shadow-[0_20px_60px_rgba(0,0,0,0.6)] backdrop-blur-xl",
                         "flex flex-col overflow-hidden",
                         // ✅ animate in
                         "animate-in fade-in-0 zoom-in-95 duration-150"
                     )}
                 >
                     {/* Search row */}
-                    <div className="shrink-0 flex items-center gap-2 px-3 py-2.5 border-b border-white/[0.07]">
-                        <Search className="w-3.01 h-3.01 text-slate-600 shrink-0" />
+                    <div className="shrink-0 flex items-center gap-2 px-4 py-3 border-b border-white/[0.07]">
+                        <Search className="w-3.01 h-3.01 text-slate-500 shrink-0" />
                         <input
                             ref={searchRef}
                             value={query}
                             onChange={(e) => setQuery(e.target.value)}
                             placeholder="Search icons..."
-                            className="flex-1 bg-transparent text-sm text-white placeholder:text-slate-600 outline-none min-w-0"
+                            className="flex-1 bg-transparent text-[13px] text-white placeholder:text-slate-600 outline-none min-w-0"
                         />
                         {query && (
                             <button
@@ -170,19 +170,19 @@ export function IconSelect({
                                             aria-selected={isActive}
                                             onClick={() => handleSelect(opt.value)}
                                             className={cn(
-                                                "group flex items-center gap-2.5 w-full px-2.5 py-2 rounded-lg",
+                                                "group flex items-center gap-2.5 w-full px-3 py-2.5 rounded-xl",
                                                 "text-left transition-all duration-100 cursor-pointer",
                                                 isActive
-                                                    ? "bg-teal-500/15 text-white"
-                                                    : "text-slate-400 hover:bg-white/[0.05] hover:text-white"
+                                                    ? "bg-cyan-500/15 text-white shadow-[0_0_20px_rgba(6,182,212,0.08)]"
+                                                    : "text-slate-400 hover:bg-white/4 hover:text-white"
                                             )}
                                         >
                                             {/* Icon chip */}
                                             <span className={cn(
-                                                "w-6 h-6 rounded-md flex items-center justify-center shrink-0 transition-all mr-2",
+                                                "w-8 h-8 rounded-xl flex items-center justify-center shrink-0 transition-all mr-2",
                                                 isActive
-                                                    ? "bg-teal-500/20 text-teal-400"
-                                                    : "bg-white/[0.05] text-slate-500 group-hover:bg-white/[0.09] group-hover:text-slate-300"
+                                                    ? "bg-teal-500/20 text-teal-400 "
+                                                    : "bg-white/3 text-slate-500 group-hover:bg-white/[0.09] group-hover:text-slate-300"
                                             )}>
                                                 <Icon className="w-3.01 h-3.01" />
                                             </span>
@@ -195,7 +195,7 @@ export function IconSelect({
                                             {/* Check */}
                                             <Check className={cn(
                                                 "w-3.5 h-3.5 text-teal-400 shrink-0 transition-opacity",
-                                                isActive ? "opacity-100" : "opacity-0"
+                                                isActive ? "opacity-100 " : "opacity-0"
                                             )} />
                                         </button>
                                     );
@@ -205,15 +205,15 @@ export function IconSelect({
                     </div>
 
                     {/* Footer */}
-                    <div className="shrink-0 px-3 py-2 border-t border-white/[0.06] flex items-center justify-between">
-                        <span className="text-[10px] text-slate-700 tabular-nums">
+                    <div className="shrink-0 px-3 py-2 border-t border-white/6 flex items-center justify-between">
+                        <span className="text-[10px] text-slate-500 tabular-nums">
                             {filtered.length} / {ICON_OPTIONS.length} icons
                         </span>
                         {value && (
                             <button
                                 type="button"
                                 onClick={() => { onChange(""); setOpen(false); setQuery(""); }}
-                                className="text-[10px] text-slate-600 hover:text-rose-400 transition-colors"
+                                className="text-[10px] text-slate-400 hover:text-rose-400 transition-colors"
                             >
                                 Clear
                             </button>

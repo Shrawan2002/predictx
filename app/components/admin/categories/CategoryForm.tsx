@@ -67,8 +67,8 @@ export default function CategoryForm() {
             ok = await createCategory(data);
         }
         if (ok) form.reset({ name: "", slug: "", icon: "" });
+        if (ok) clearSelectedCategory();
     };
-
     return (
         /*
          * Form fills full panel height

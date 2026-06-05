@@ -125,7 +125,7 @@ export const useCategoryStore = create<CategoryState>()((set, get) => ({
             set({ loading: true });
             const res = await categoryService.getCategories();
             if (res.success && res.data) {
-                set({ categories: res.data as Category[] });
+                set({ categories: res.data });
             } else {
                 toast.error(res.message || "Failed to fetch categories");
                 set({ error: res.message || "Failed to fetch categories" });

@@ -31,7 +31,7 @@ export default function DashboardPage() {
                     <RevenueChart />
                 </div>
 
-                <div className="rounded-2xl border border-zinc-800/60 bg-zinc-900/60 p-6 flex flex-col gap-3">
+                <div className="rounded-2xl border border-white/[0.06]/60 bg-zinc-900/60 p-6 flex flex-col gap-3">
                     <p className="text-[10px] font-semibold tracking-widest text-zinc-500 uppercase">
                         Treasury Balance
                     </p>

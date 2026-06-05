@@ -2,30 +2,30 @@
 
 import { useState } from "react";
 import { Search, X } from "lucide-react";
-import { Input } from "@/components/ui/input";
+
 import { useSubCategoryStore } from "@/store/subCategoryStore";
 import { useCategoryStore } from "@/store/categoryStore";
 import SubcategoryCard from "@/components/admin/subcategories/SubcategoryCard";
 import DeleteSubcategoryDialog from "./DeleteSubcategoryDialog";
-import { getIconOption } from "@/constants/icon-options"; // ✅ needed to resolve icon strings
+import { getIconOption } from "@/constants/icon-options";
 import type { SubCategory } from "@/types/subcategory.types";
 
 function SkeletonRow() {
     return (
-        <div className="flex items-center gap-4 px-5 h-[64px] border-b border-white/[0.04] animate-pulse">
+        <div className="flex items-center gap-4 px-5 h-[64px] border-b border-cyan-500/[0.06] animate-pulse">
             <div className="flex items-center gap-3 flex-1 min-w-0">
-                <div className="w-8 h-8 rounded-lg bg-white/[0.05] shrink-0" />
+                <div className="w-8 h-8 rounded-lg bg-cyan-500/[0.06] shrink-0" />
                 <div className="flex flex-col gap-2">
-                    <div className="h-3 w-28 bg-white/[0.06] rounded" />
-                    <div className="h-2 w-20 bg-white/[0.04] rounded" />
+                    <div className="h-3 w-28 bg-white/[0.05] rounded" />
+                    <div className="h-2 w-20 bg-white/[0.03] rounded" />
                 </div>
             </div>
             <div className="w-[100px] shrink-0 flex justify-end">
-                <div className="h-2.5 w-16 bg-white/[0.04] rounded" />
+                <div className="h-2.5 w-16 bg-white/[0.03] rounded" />
             </div>
             <div className="w-[62px] shrink-0 flex gap-1 justify-end">
-                <div className="w-7 h-7 rounded-lg bg-white/[0.04]" />
-                <div className="w-7 h-7 rounded-lg bg-white/[0.04]" />
+                <div className="w-7 h-7 rounded-lg bg-white/[0.03]" />
+                <div className="w-7 h-7 rounded-lg bg-white/[0.03]" />
             </div>
         </div>
     );
@@ -69,7 +69,6 @@ export default function SubcategoryList() {
         setDialogOpen(true);
     };
 
-    // ✅ Helper to render a Lucide icon from string name
     function CategoryIcon({ iconName, className }: { iconName: string; className?: string }) {
         const opt = getIconOption(iconName);
         if (!opt) return <span className="text-[10px]">{iconName}</span>;
@@ -79,11 +78,11 @@ export default function SubcategoryList() {
 
     return (
         <>
-            <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
+            <div className="flex flex-col flex-1 min-h-0 overflow-hidden bg-[#111827]">
 
                 {/* ── Category filter pills ── */}
                 {categories.length > 0 && (
-                    <div className="shrink-0 flex items-center gap-1.5 px-5 py-3 border-b border-white/[0.06] overflow-x-auto [&::-webkit-scrollbar]:hidden bg-[#0a0d14]">
+                    <div className="shrink-0 flex items-center gap-1.5 px-5 py-3 border-b border-cyan-500/10 overflow-x-auto [&::-webkit-scrollbar]:hidden bg-[#111827]">
                         <span className="text-[10px] text-slate-600 font-medium tracking-widest uppercase shrink-0 mr-1">
                             Filter:
                         </span>
@@ -93,8 +92,8 @@ export default function SubcategoryList() {
                             type="button"
                             onClick={() => setSelectedCategoryFilter(null)}
                             className={`shrink-0 px-3 py-1.5 rounded-lg text-[11px] font-medium transition-all border ${!selectedCategoryFilter
-                                ? "bg-violet-500/15 border-violet-500/30 text-violet-300"
-                                : "bg-white/[0.03] border-white/[0.07] text-slate-500 hover:text-slate-300 hover:bg-white/[0.05]"
+                                ? "bg-cyan-400/10 border-cyan-400/20 text-cyan-300"
+                                : "bg-[#0F172A] border-cyan-500/10 text-slate-400 hover:text-white hover:bg-cyan-500/[0.06]"
                                 }`}
                         >
                             All
@@ -109,14 +108,13 @@ export default function SubcategoryList() {
                                     type="button"
                                     onClick={() => setSelectedCategoryFilter(cat.id)}
                                     className={`shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-medium transition-all border ${isActive
-                                        ? "bg-violet-500/15 border-violet-500/30 text-violet-300"
-                                        : "bg-white/[0.03] border-white/[0.07] text-slate-500 hover:text-slate-300 hover:bg-white/[0.05]"
+                                        ? "bg-cyan-400/10 border-cyan-400/20 text-cyan-400"
+                                        : "bg-[#0F172A] border-cyan-500/10 text-slate-500 hover:text-slate-300 hover:bg-cyan-500/[0.06]"
                                         }`}
                                 >
-                                    {/* ✅ FIX 1 — render actual Lucide icon not raw string */}
                                     <CategoryIcon
                                         iconName={cat.icon}
-                                        className={`w-3 h-3 shrink-0 ${isActive ? "text-violet-400" : "text-slate-600"}`}
+                                        className={`w-3 h-3 shrink-0 ${isActive ? "text-cyan-400" : "text-slate-500"}`}
                                     />
                                     <span>{cat.name}</span>
                                 </button>
@@ -126,7 +124,7 @@ export default function SubcategoryList() {
                 )}
 
                 {/* ── List header ── */}
-                <div className="shrink-0 flex items-center justify-between px-5 py-3 border-b border-white/[0.06]">
+                <div className="shrink-0 flex items-center justify-between px-5 py-3 border-b border-cyan-500/10">
                     <div className="flex items-center gap-2 flex-wrap">
                         <span className="text-white text-sm font-semibold">
                             {categoryWithSubCategories?.name
@@ -137,18 +135,18 @@ export default function SubcategoryList() {
                             {loading ? "..." : `${subCategories.length} total`}
                         </span>
 
-                        {/* ✅ FIX 2 — active filter chip with Lucide icon */}
+                        {/* Active filter chip */}
                         {selectedCategoryFilter && categoryWithSubCategories && (
-                            <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-violet-500/10 border border-violet-500/20 text-[10px] text-violet-400">
+                            <div className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-cyan-400/[0.08] border border-cyan-400/20 text-[10px] text-cyan-300">
                                 <CategoryIcon
                                     iconName={categoryWithSubCategories.icon}
-                                    className="w-3 h-3 text-violet-400 shrink-0"
+                                    className="w-3 h-3 text-cyan-400 shrink-0"
                                 />
                                 <span className="font-medium">{categoryWithSubCategories.name}</span>
                                 <button
                                     type="button"
                                     onClick={() => setSelectedCategoryFilter(null)}
-                                    className="text-violet-500/60 hover:text-violet-300 transition-colors ml-0.5"
+                                    className="text-cyan-500/50 hover:text-cyan-300 transition-colors ml-0.5"
                                 >
                                     <X size={10} />
                                 </button>
@@ -156,20 +154,36 @@ export default function SubcategoryList() {
                         )}
                     </div>
 
-                    <div className="relative w-48">
-                        <Search size={12} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-600 pointer-events-none" />
-                        <Input
+                    <div style={{ position: "relative", width: "192px", display: "flex", alignItems: "center" }}>
+                        <Search
+                            size={13}
+                            style={{ position: "absolute", left: "10px", color: "#64748b", pointerEvents: "none", flexShrink: 0, zIndex: 10 }}
+                        />
+                        <input
+                            type="text"
                             placeholder="Search subcategories..."
                             value={search}
                             onChange={(e) => setSearch(e.target.value)}
-                            className="h-8 pl-8 bg-white/[0.04] border-white/[0.08] text-white placeholder:text-slate-700 focus-visible:ring-1 focus-visible:ring-violet-500/40 rounded-lg text-xs"
+                            style={{
+                                width: "100%",
+                                height: "32px",
+                                paddingLeft: "30px",
+                                paddingRight: "10px",
+                                background: "#0F172A",
+                                border: "1px solid rgba(6,182,212,0.15)",
+                                borderRadius: "8px",
+                                color: "#fff",
+                                fontSize: "12px",
+                                outline: "none",
+                            }}
+                            onFocus={(e) => { e.currentTarget.style.borderColor = "rgba(34,211,238,0.35)"; e.currentTarget.style.boxShadow = "0 0 0 1px rgba(34,211,238,0.15)"; }}
+                            onBlur={(e) => { e.currentTarget.style.borderColor = "rgba(6,182,212,0.15)"; e.currentTarget.style.boxShadow = "none"; }}
                         />
                     </div>
                 </div>
 
-                {/* ✅ FIX 3 — column headers match SubcategoryCard flex layout exactly
-                    Card: flex gap-4 | flex-1 (name) | w-[100px] (date) | w-[62px] (actions) */}
-                <div className="shrink-0 flex items-center gap-4 px-5 py-2 border-b border-white/[0.04] bg-white/[0.01]">
+                {/* ── Column headers ── */}
+                <div className="shrink-0 flex items-center gap-4 px-5 py-2 border-b border-cyan-500/[0.06] bg-cyan-500/[0.02]">
                     <div className="flex-1 min-w-0">
                         <span className="text-[9px] font-bold tracking-widest text-slate-600 uppercase">
                             Name / Slug
@@ -186,10 +200,10 @@ export default function SubcategoryList() {
                 {/* ── Rows ── */}
                 <div className="h-[500px] overflow-y-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
 
-                    {/* ✅ FIX 4 — no category selected state */}
+                    {/* No category selected */}
                     {!selectedCategoryFilter && !loading ? (
                         <div className="flex flex-col items-center justify-center py-20 text-center">
-                            <div className="w-14 h-14 rounded-2xl bg-white/[0.03] border border-dashed border-white/[0.08] flex items-center justify-center text-2xl mb-4">
+                            <div className="w-14 h-14 rounded-2xl bg-[#0F172A] border border-dashed border-cyan-500/10 flex items-center justify-center text-2xl mb-4">
                                 👆
                             </div>
                             <p className="text-slate-400 text-sm font-medium">Select a category</p>
@@ -201,7 +215,7 @@ export default function SubcategoryList() {
                         Array.from({ length: 5 }).map((_, i) => <SkeletonRow key={i} />)
                     ) : filtered.length === 0 ? (
                         <div className="flex flex-col items-center justify-center py-20 text-center">
-                            <div className="w-14 h-14 rounded-2xl bg-white/[0.03] border border-dashed border-white/[0.08] flex items-center justify-center text-2xl mb-4">
+                            <div className="w-14 h-14 rounded-2xl bg-[#0F172A] border border-dashed border-cyan-500/10 flex items-center justify-center text-2xl mb-4">
                                 {search ? "🔍" : "📂"}
                             </div>
                             <p className="text-slate-400 text-sm font-medium">

@@ -64,7 +64,6 @@ interface ApiResponse<T = unknown> {
 
 export const categoryService = {
 
-    // ✅ { data } destructures axios wrapper → data = your API body
     getCategories: async (): Promise<ApiResponse<Category[]>> => {
         const { data } = await apiFetch.get("/category");
         console.log("apiFetch", data);
