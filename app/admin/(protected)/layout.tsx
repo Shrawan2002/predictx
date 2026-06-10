@@ -6,11 +6,7 @@ import AdminDarkWrapper from "./adminwraper";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function DashboardLayout({
-    children,
-}: {
-    children: React.ReactNode;
-}) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
     const router = useRouter();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
     const [checkingAuth, setCheckingAuth] = useState(true);
@@ -38,11 +34,9 @@ export default function DashboardLayout({
             </div>
         );
     }
-
     return (
         <AdminDarkWrapper>
             <div className="flex h-screen overflow-hidden bg-[#070B14] text-white">
-
                 {/*
                  * SIDEBAR
                  * On desktop: always occupies 260px in the flex row

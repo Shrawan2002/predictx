@@ -1,59 +1,40 @@
-
-
 "use client";
 
-import { motion } from "framer-motion";
-import { useTab } from "@/context/tabContext";
+import type { SubCategory } from "@/types/user/userEvent.types";
 
-const tabs = [
-    { label: "All", value: "all" },
-    { label: "Up / Down", value: "updown" },
-    { label: "Above / Below", value: "abovebelow" },
-    { label: "Price Range", value: "range" },
-    { label: "Hit Price", value: "hit" },
-];
+interface FilterTabsProps {
+    subCategories: SubCategory[];
+    selected: number | null;
+    onSelect: (id: number | null) => void;
+}
 
-export default function FilterTabs() {
-    const { activeTab, setActiveTab } = useTab();
+export default function FilterTabs({ subCategories, selected, onSelect }: FilterTabsProps) {
+    if (subCategories.length === 0) return null;
 
     return (
-        <div className="overflow-x-auto scrollbar-hide mb-6">
-            <div className="flex gap-3 min-w-max">
-                {tabs.map((tab) => {
-                    const isActive = activeTab === tab.value;
-
-                    return (
-                        <button
-                            key={tab.value}
-                            onClick={() => setActiveTab(tab.value)}
-                            className="relative px-4 py-2 rounded-md text-sm whitespace-nowrap overflow-hidden"
-                        >
-                            {/* Animated Background */}
-                            {isActive && (
-                                <motion.div
-                                    layoutId="activeTab"
-                                    className="absolute inset-0 dark:bg-[#11314a] bg-blue-400 rounded-xl"
-                                    transition={{
-                                        type: "spring",
-                                        stiffness: 50,
-                                        damping: 10,
-                                    }}
-                                />
-                            )}
-
-                            {/* Text */}
-                            <span
-                                className={`relative z-10 font-bold transition-colors duration-300 ${isActive
-                                    ? "text-white dark:text-blue-500"
-                                    : "dark:text-gray-400 text-black"
-                                    }`}
-                            >
-                                {tab.label}
-                            </span>
-                        </button>
-                    );
-                })}
-            </div>
+        <div className="flex items-center gap-2 overflow-x-auto pb-1 [&::-webkit-scrollbar]:hidden">
+            {/* All — clears subcategory filter */}
+            <button
+                onClick={() => onSelect(null)}
+                className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all border ${!selected
+                    ? "bg-primary/10 border-primary/30 text-primary"
+                    : "bg-transparent border-border text-muted-foreground hover:text-foreground hover:bg-accent"
+                    }`}
+            >
+                All
+            </button>
+            {subCategories.map((sub) => (
+                <button
+                    key={sub.id}
+                    onClick={() => onSelect(sub.id)}
+                    className={`shrink-0 px-4 py-1.5 rounded-full text-sm font-medium transition-all border ${selected === sub.id
+                        ? "bg-primary/10 border-primary/30 text-primary"
+                        : "bg-transparent border-border text-muted-foreground hover:text-foreground hover:bg-accent"
+                        }`}
+                >
+                    {sub.name}
+                </button>
+            ))}
         </div>
     );
 }

@@ -44,7 +44,7 @@
 //     createdAt?: string;
 // }
 
-export type MarketType = "updown" | "abovebelow" | "range" | "hit" | "yesno";
+export type MarketType = "up-down" | "above-below" | "price-range" | "hit-price" | "yes-no";
 
 
 export interface Outcome {

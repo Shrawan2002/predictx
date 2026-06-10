@@ -1,14 +1,18 @@
-import type { NextConfig } from "next";
-
-const nextConfig: NextConfig = {
-  // async rewrites() {
-  //   return [
-  //     {
-  //       source: '/api/v1/:path*',
-  //       destination: 'https://nesthospital.demoarrayblocks.site/api/v1/:path*',
-  //     },
-  //   ];
-  // },
+/** @type {import('next').NextConfig} */
+const nextConfig = {
+  turbopack: {},
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "assets.coingecko.com",
+      },
+      {
+        protocol: "https",
+        hostname: "nesthospital.demoarrayblocks.site",
+      },
+    ],
+  },
 };
 
-export default nextConfig;
+module.exports = nextConfig;

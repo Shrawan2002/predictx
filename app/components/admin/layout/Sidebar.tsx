@@ -8,7 +8,7 @@ import {
     LayoutDashboard, TrendingUp, BookOpen, Activity,
     Tag, Layers, Users, AlertTriangle, Wallet, Landmark,
     BarChart3, ShieldAlert, Settings, FileText,
-    LogOut, ChevronRight,
+    LogOut, ChevronRight, Coins, BadgeDollarSign,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
@@ -22,6 +22,7 @@ export const navSections = [
             { label: "Subcategories", icon: Layers, href: "/admin/subcategories" },
             { label: "Order Books", icon: BookOpen, href: "/admin/order-books" },
             { label: "Live Trades", icon: Activity, href: "/admin/live-trades" },
+            { label: "Assets", icon: Coins, href: "/admin/assets" }
         ],
     },
     {

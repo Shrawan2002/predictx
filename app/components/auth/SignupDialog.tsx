@@ -153,7 +153,7 @@ export default function SignupDialog({ open, onOpenChange, onSuccess, onLoginCli
     }
     return (
         <Dialog open={open} onOpenChange={handleClose}>
-            <DialogContent className="max-w-[520px] rounded-[28px] p-6">
+            <DialogContent className="w-[400px] rounded-[28px] p-6">
                 {/* SIGNUP STEP */}
                 {step === "signup" && (
                     <>

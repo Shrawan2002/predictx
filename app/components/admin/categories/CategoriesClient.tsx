@@ -23,15 +23,7 @@ export default function CategoriesClient() {
         <div
             className="flex flex-col h-full min-h-0 bg-linear-to-br from-[#020817] to-[#0B1120]">
             {/* ── Sticky page header ── */}
-            <div className="
-                shrink-0
-                px-6
-                py-5
-                border-b
-                border-white/6
-               bg-[#020817]/95
-                backdrop-blur-xl
-            ">
+            <div className="shrink-0 px-6 py-5 border-b border-white/6 bg-[#020817]/95 backdrop-blur-xl">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
                     <div className="flex items-center gap-2 w-full sm:w-auto">
                         <div className="

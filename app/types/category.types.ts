@@ -2,6 +2,7 @@ export interface SubCategory {
     id: number;
     name: string;
     slug: string;
+    icon?: string;//change in database
     categoryId: number;
     createdAt: string;
     updatedAt: string;

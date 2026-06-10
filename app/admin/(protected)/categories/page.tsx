@@ -1,6 +1,4 @@
 import CategoriesClient from "@/components/admin/categories/CategoriesClient";
-import SubCategories from "@/components/admin/categories/SubCategories";
-import SubcategoriesClient from "@/components/admin/subcategories/SubcategoriesClient";
 
 export const metadata = {
     title: "Category Management | PredictX Admin",

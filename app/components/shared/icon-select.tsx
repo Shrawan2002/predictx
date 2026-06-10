@@ -46,23 +46,17 @@ export function IconSelect({
     // ── Filtered list ───────────────────────────────────────
     const filtered = useMemo(() => {
         const q = query.toLowerCase().trim();
-        if (!q) return ICON_OPTIONS;
-        return ICON_OPTIONS.filter(
-            (opt) =>
-                opt.label.toLowerCase().includes(q) ||
-                opt.value.toLowerCase().includes(q)
-        );
-    }, [query]);
 
+        if (!q) return ICON_OPTIONS;
+
+        return ICON_OPTIONS.filter((opt) => opt.label.toLowerCase().includes(q) || opt.value.toLowerCase().includes(q));
+    }, [query]);
     // ── Selection handler ───────────────────────────────────
-    const handleSelect = useCallback(
-        (selectedValue: string) => {
-            onChange(selectedValue === value ? "" : selectedValue);
-            setOpen(false);
-            setQuery("");
-        },
-        [onChange, value]
-    );
+    const handleSelect = useCallback((selectedValue: string) => {
+        onChange(selectedValue === value ? "" : selectedValue);
+        setOpen(false);
+        setQuery("");
+    }, [onChange, value]);
 
     const selected = value ? getIconOption(value) : undefined;
     const SelectedIcon = selected?.icon ?? null;
@@ -70,7 +64,6 @@ export function IconSelect({
     return (
         // ✅ relative wrapper — dropdown is positioned relative to this
         <div className="relative w-full">
-
             {/* ── Trigger button ── */}
             <button
                 ref={triggerRef}
@@ -110,13 +103,6 @@ export function IconSelect({
                     )}
                 />
             </button>
-
-            {/* ── Dropdown panel ──
-                ✅ absolute positioning — stays INSIDE the form panel
-                ✅ z-50 so it renders above sibling elements
-                ✅ top-[calc(100%+6px)] — 6px gap below trigger
-                ✅ max-h-[220px] — never taller than this
-                ✅ overflow-hidden on wrapper, scroll only on list  */}
             {open && (
                 <div
                     ref={dropdownRef}

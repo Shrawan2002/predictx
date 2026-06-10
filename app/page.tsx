@@ -1,7 +1,7 @@
 
 import { redirect } from 'next/navigation';
 
-export default function Home() {
+export default function TrendingPage() {
 
-  redirect('/home');
+  redirect('/trending');
 }

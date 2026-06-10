@@ -49,7 +49,7 @@ export default function LoginDialog({ open, onOpenChange }: Props) {
             }
             onOpenChange(open);
         }}>
-            <DialogContent className="max-w-[520px] rounded-[28px] p-6">
+            <DialogContent className="w-[400px] rounded-[28px] p-6">
                 <DialogHeader>
                     <DialogTitle className="text-2xl font-bold text-center mb-4">
                         welcome to PredictX

@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 
 const filters = [
-    { label: "Home", icon: House, href: "/home" },
+    { label: "Home", icon: House, href: "/trending" },
     { label: "Markets", icon: LineChart, href: "/markets" },
     { label: "Activity", icon: Activity, href: "/activity" },
     { label: "Portfolio", icon: Briefcase, href: "/portfolio" },

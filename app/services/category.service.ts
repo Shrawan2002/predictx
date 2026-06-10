@@ -58,7 +58,7 @@ import { apiFetch } from "@/lib/api";
 
 interface ApiResponse<T = unknown> {
     success: boolean;
-    message: string;
+    message?: string;
     data: T;
 }
 
@@ -66,7 +66,7 @@ export const categoryService = {
 
     getCategories: async (): Promise<ApiResponse<Category[]>> => {
         const { data } = await apiFetch.get("/category");
-        console.log("apiFetch", data);
+        // console.log("apiFetch", data);
         return data;
     },
 
