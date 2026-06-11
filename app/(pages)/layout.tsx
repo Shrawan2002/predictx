@@ -24,7 +24,7 @@ export default function PagesLayout({ children }: { children: React.ReactNode })
 
             {/* MAIN */}
             {/* <main className="flex-1 pt-[40px] md:ml-[170px] px-12 md:px-20 pb-6 bg-white"> */}
-            <main className="flex-1 pt-[30px]  px-12 md:px-20 pb-6 bg-white">
+            <main className="flex-1 pt-[30px]  px-12 md:px-20 pb-6 ">
                 <TabProvider>
                     {children}
                 </TabProvider>

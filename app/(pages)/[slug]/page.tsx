@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import EventCard from "@/components/EventCard";
 import FilterTabs from "@/components/FilterTabs";
 import { useUserEventStore, selectFilteredEvents } from "@/store/user/userEventStore";
+import CategoryNotFound from "@/components/CategoryNotFound";
 
 const INITIAL_COUNT = 12;
 export default function CategoryPage() {
@@ -102,8 +103,12 @@ export default function CategoryPage() {
     const visible = filtered.slice(0, visibleCount);
     const activeCategory = categories.find((c) => c.slug === slug);
 
+    if (!loading && categories.length > 0 && !activeCategory) {
+        return <CategoryNotFound slug={slug} />;
+    }
+
     return (
-        <main className="min-h-screen bg-white text-black transition-colors duration-300">
+        <main className="min-h-screen  transition-colors duration-300">
             {/* ── Header ── */}
             <div className="mb-6">
                 <div className="flex items-center justify-between gap-3">
@@ -165,7 +170,6 @@ export default function CategoryPage() {
                         </button>
                     </div>
                 </div>
-
                 {/* ── Subcategory filter pills ── */}
                 {subCategories.length > 0 && (
                     <div className="mt-4">

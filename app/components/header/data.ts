@@ -14,7 +14,7 @@ export const tabs = [
     {
         label: "Trending",
         icon: TrendingUp,
-        href: "/home",
+        href: "/trending",
     },
     {
         label: "Crypto",
@@ -37,7 +37,7 @@ export const sidebarFilters = [
     {
         label: "Home",
         icon: House,
-        href: "/home",
+        href: "/trending",
     },
     {
         label: "Markets",
